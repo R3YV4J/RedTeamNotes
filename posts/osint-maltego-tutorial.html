@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo · RedTeamNotes</title>
+  <meta name="description" content="Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.">
+  <meta name="keywords" content="OSINT, maltego, reconocimiento">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html">
+  <meta property="og:title" content="Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo · RedTeamNotes">
+  <meta property="og:description" content="Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-osint-maltego-tutorial.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-02-19">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="OSINT">
+  <meta property="article:tag" content="OSINT, maltego, reconocimiento">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo">
+  <meta name="twitter:description" content="Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-osint-maltego-tutorial.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo",
+    "description": "Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-osint-maltego-tutorial.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-02-19",
+    "dateModified": "2026-02-19",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html"},
+    "articleSection": "OSINT",
+    "keywords": "OSINT, maltego, reconocimiento",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "OSINT", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/osint.html"},
+      {"@type": "ListItem", "position": 3, "name": "Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/osint.html">OSINT</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Maltego para OSINT: cuándo sirve y cuándo es perder el tiemp</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-osint">OSINT</span>
+      <span class="card-date">19 Febrero 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo</h1>
+    <p class="article-subtitle">Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        19 Febrero 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~3 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Intermedio
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-uso-maltego-y-por-que-no-siempre">Por qué uso Maltego (y por qué no siempre)</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#el-flujo-que-realmente-sigo">El flujo que realmente sigo</a></li>
+<li><a href="#transforms-que-uso-de-verdad">Transforms que uso de verdad</a></li>
+<li><a href="#lo-que-no-esperaba-la-primera-vez-el-limite-de-transforms-gratuitos">Lo que no esperaba la primera vez: el límite de transforms gratuitos</a></li>
+<li><a href="#exportar-para-el-informe">Exportar para el informe</a></li>
+<li><a href="#cuando-no-usar-maltego">Cuándo no usar Maltego</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-uso-maltego-y-por-que-no-siempre">Por qué uso Maltego (y por qué no siempre)</h2>
+<p>Maltego sirve para una cosa concreta: convertir una lista plana de datos
+sueltos (dominios, emails, nombres) en un grafo donde las relaciones se ven
+a simple vista. Es muy útil cuando tienes diez fragmentos de información de
+una organización y necesitas ver qué conecta con qué. Es mucho menos útil si
+solo necesitas resolver un dominio o buscar un email — para eso uso
+<code>theHarvester</code> o una query directa, porque montar un grafo para eso es
+gastar tiempo en la interfaz en vez de en la investigación.</p>
+<blockquote>
+<p>El uso de OSINT tiene que respetar la normativa de protección de datos
+aplicable (RGPD en la UE). Esto es para investigar con alcance autorizado,
+no para acosar a nadie ni saltarte consentimientos.</p>
+</blockquote>
+<h2 id="instalacion">Instalación</h2>
+<p>En Kali viene preinstalado. Si no:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install maltego -y
+</code></pre>
+<p>La alternativa es bajar la Community Edition desde la web oficial, que pide
+registro y te limita a 12 resultados por transform. Esa limitación es el
+motivo por el que en proyectos algo grandes acabas necesitando la versión de
+pago — con 12 resultados no llegas a mapear ni los subdominios de una
+empresa mediana.</p>
+<h2 id="el-flujo-que-realmente-sigo">El flujo que realmente sigo</h2>
+<p>No empiezo lanzando transforms al azar. El orden que me funciona:</p>
+<pre><code class="language-text">1. Domain (empresa.com)
+   → To DNS Name [DNS]        → subdominios
+   → To IP Address            → infraestructura detrás de cada subdominio
+
+2. De los subdominios &quot;interesantes&quot; (admin, vpn, mail, dev...)
+   → To Website [Quick Lookup] → confirmar que responden y qué tecnología usan
+
+3. Domain
+   → To Email addresses        → empleados potenciales, suele dar ruido
+
+4. Cada Email address con pinta real (no genérico tipo info@)
+   → To Person                 → cruzar con perfiles públicos
+</code></pre>
+<p>El punto 3 es el que más ruido genera. <code>To Email addresses</code> te devuelve
+cualquier cosa indexada por los motores que usa de fuente, incluyendo
+direcciones de contacto genéricas que no aportan nada para mapear personal
+real. Filtro a mano antes de seguir con el punto 4, si no el grafo se llena
+de nodos que no significan nada.</p>
+<h2 id="transforms-que-uso-de-verdad">Transforms que uso de verdad</h2>
+<p>De la lista completa, estos son los que repito en casi cualquier investigación:</p>
+<table>
+<thead>
+<tr>
+<th>Transform</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>To DNS Name [DNS]</code></td>
+<td>Subdominios — el punto de partida casi siempre</td>
+</tr>
+<tr>
+<td><code>To IP Address [DNS]</code></td>
+<td>Saber qué infraestructura hay detrás de cada subdominio</td>
+</tr>
+<tr>
+<td><code>To Website [Quick lookup]</code></td>
+<td>Confirmar que un host responde antes de seguir investigando</td>
+</tr>
+<tr>
+<td><code>To Email addresses</code></td>
+<td>Útil pero con ruido, filtrar después</td>
+</tr>
+<tr>
+<td><code>To Person [using Natural Name]</code></td>
+<td>Solo cuando ya tienes un email o nombre concreto, no a ciegas</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lo-que-no-esperaba-la-primera-vez-el-limite-de-transforms-gratuitos">Lo que no esperaba la primera vez: el límite de transforms gratuitos</h2>
+<p>Si usas la Community Edition con las transforms públicas estándar, te vas a
+topar con el límite de 12 resultados bastante rápido en cualquier dominio
+con presencia real. La sensación es que el grafo "se corta" sin avisar
+mucho. No es un bug, es la licencia. Si necesitas profundidad real, hay dos
+caminos: pagar la versión de pago, o montar tus propios transforms locales
+con datos que ya tengas (por ejemplo, resultados de tu propio <code>theHarvester</code>
+importados como CSV).</p>
+<h2 id="exportar-para-el-informe">Exportar para el informe</h2>
+<pre><code class="language-text">File → Export → To Image (PNG/JPEG)
+File → Export → To Table (CSV) — mejor para anexos de informe que la imagen
+</code></pre>
+<p>El CSV es lo que realmente uso en el entregable final; la imagen del grafo
+queda bien para una vista general en la primera página, pero un cliente no
+va a leer relaciones de un grafo con 80 nodos, va a leer una tabla.</p>
+<h2 id="cuando-no-usar-maltego">Cuándo no usar Maltego</h2>
+<p>Si la investigación es solo "¿este dominio tiene subdominios con un panel de
+admin expuesto?", monta un escaneo directo con <code>subfinder</code> + <code>httpx</code> y ahorra
+el tiempo de la interfaz gráfica. Maltego gana cuando el valor está en ver
+relaciones entre múltiples entidades distintas, no cuando es un único tipo
+de búsqueda repetida.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">OSINT</a>
+<a href="#" class="tag">maltego</a>
+<a href="#" class="tag">reconocimiento</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-uso-maltego-y-por-que-no-siempre">Por qué uso Maltego (y por qué no siempre)</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#el-flujo-que-realmente-sigo">El flujo que realmente sigo</a></li>
+<li><a href="#transforms-que-uso-de-verdad">Transforms que uso de verdad</a></li>
+<li><a href="#lo-que-no-esperaba-la-primera-vez-el-limite-de-transforms-gratuitos">Lo que no esperaba la primera vez: el límite de transforms gratuitos</a></li>
+<li><a href="#exportar-para-el-informe">Exportar para el informe</a></li>
+<li><a href="#cuando-no-usar-maltego">Cuándo no usar Maltego</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html&text=Maltego%20para%20OSINT:%20cuándo%20sirve%20y%20cuándo%20es%20perder%20el%20tiempo" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "osint-maltego-tutorial";
+    const category = "osint";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre esto · {{SITE_NAME}}</title>
+  <meta name="description" content="Qué es {{SITE_NAME}}: notas técnicas de pentesting, OSINT, Linux y Python, con fines educativos. Quién lo escribe y qué encontrarás aquí.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{SITE_URL}}/pages/sobre-mi.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sobre esto · {{SITE_NAME}}">
+  <meta property="og:description" content="Qué es {{SITE_NAME}} y qué tipo de contenido se publica aquí.">
+  <meta property="og:url" content="{{SITE_URL}}/pages/sobre-mi.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de {{SITE_NAME}}</span>
+    <span>r3yv4j</span>
+  </div>
+</div>
+
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="{{BASE_PATH}}/" class="logo"><span class="logo-mark">~/</span>{{SITE_NAME}}</a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="{{BASE_PATH}}/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Ctrl+K</span></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main>
+
+<div class="article-header">
+  <div class="container">
+    <nav class="breadcrumbs"><a href="{{BASE_PATH}}/">Inicio</a><span class="sep">/</span><span class="current">Sobre esto</span></nav>
+    <h1 class="article-title">Sobre {{SITE_NAME}}</h1>
+    <p class="article-subtitle">Qué es esto, qué vas a encontrar y por qué existe.</p>
+  </div>
+</div>
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+      <article class="article-content">
+
+        <h2 id="que-es">Qué es esto</h2>
+        <p>
+          {{SITE_NAME}} es un cuaderno técnico sobre pentesting y seguridad ofensiva.
+          No es una empresa, no es un curso, no es una marca con departamento de
+          marketing. Es el sitio donde paso a limpio las notas que tomo mientras
+          practico: comandos que uso, configuraciones que me han dado problemas,
+          writeups de máquinas que he resuelto, scripts que escribo porque me
+          cansé de repetir lo mismo a mano.
+        </p>
+        <p>
+          Lo escribe <strong>{{AUTHOR_NAME}}</strong>. Si buscas una biografía con hitos
+          profesionales, no la vas a encontrar aquí — esa información está en el
+          <a href="{{AUTHOR_LINKEDIN}}" target="_blank" rel="noopener">perfil de LinkedIn</a>.
+          Esta página explica el blog, no a la persona.
+        </p>
+
+        <h2 id="que-se-publica">Qué tipo de contenido se publica</h2>
+        <p>Todo el contenido cae, más o menos, en una de estas categorías:</p>
+        <ul>
+          <li><strong>Pentesting</strong> — metodología, herramientas de explotación, escalada de privilegios, post-explotación.</li>
+          <li><strong>OSINT</strong> — reconocimiento pasivo, herramientas de investigación, cómo cruzar fuentes públicas sin perderse.</li>
+          <li><strong>Redes</strong> — lo justo de TCP/IP, análisis de tráfico, lo que hace falta entender antes de atacar nada.</li>
+          <li><strong>Linux</strong> — administración orientada a seguridad, hardening, lo que se rompe al usar Kali.</li>
+          <li><strong>Python</strong> — scripts propios de automatización, nada de frameworks que no usaría en un pentest real.</li>
+          <li><strong>Certificaciones</strong> — qué tal fue prepararlas, qué merece la pena y qué no, sin venderte un curso.</li>
+          <li><strong>Vulnerabilidades</strong> — cómo leer un CVE, cómo priorizar parches, metodología de análisis.</li>
+          <li><strong>Herramientas</strong> — lo que uso de verdad, con sus límites incluidos, no solo la parte bonita.</li>
+        </ul>
+
+        <h2 id="laboratorios">Laboratorios y writeups</h2>
+        <p>
+          Buena parte de lo que se publica aquí sale de practicar en plataformas
+          como HackTheBox, TryHackMe o Proving Grounds, y de montar laboratorios
+          propios con VirtualBox o Proxmox. Cuando un writeup aparece en el blog,
+          es porque hay algo en esa máquina que vale la pena explicar más allá del
+          "y entonces ejecuté el exploit": una decisión de enumeración, un error
+          que me costó tiempo, un patrón que se repite en otras máquinas.
+        </p>
+
+        <h2 id="objetivo">Objetivo educativo</h2>
+        <p>
+          Todo el contenido es educativo. Eso significa dos cosas: primero, que
+          está pensado para que entiendas el <em>por qué</em> de una técnica, no
+          solo el comando a copiar y pegar. Segundo, que asumo que la persona que
+          lo lee va a aplicarlo en sistemas propios, en laboratorios, o con
+          autorización explícita — no en infraestructura ajena sin permiso.
+        </p>
+        <p>
+          No reviso ni puedo controlar el uso que se le dé a la información
+          publicada. El <a href="aviso-legal.html">aviso legal</a> detalla esto
+          con más precisión.
+        </p>
+
+        <h2 id="por-que-existe">Por qué existe este blog</h2>
+        <p>
+          Porque tomar notas en local y no compartirlas es desperdiciar el trabajo
+          de organizarlas. Si algo de lo que hay aquí le ahorra tiempo a alguien
+          que está aprendiendo lo mismo, mejor. Si no, al menos a mí me sirve
+          como referencia cuando se me olvida un flag de Nmap por enésima vez.
+        </p>
+
+        <h2 id="contacto-cta">Contacto</h2>
+        <p>
+          Para dudas, correcciones sobre algún artículo, o sugerencias de temas,
+          puedes abrir un issue en el
+          <a href="{{AUTHOR_GITHUB}}" target="_blank" rel="noopener">repositorio de GitHub</a>.
+        </p>
+      </article>
+
+      <aside class="sidebar">
+        <div class="sidebar-widget">
+          <div class="widget-title">Enlaces</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="{{AUTHOR_GITHUB}}" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;justify-content:center">GitHub</a>
+            <a href="{{AUTHOR_LINKEDIN}}" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;justify-content:center">LinkedIn</a>
+            <a href="{{AUTHOR_PORTFOLIO}}" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;justify-content:center">Portfolio</a>
+          </div>
+        </div>
+        <div class="sidebar-widget">
+          <div class="widget-title">Categorías</div>
+          <div class="tag-cloud">
+            <a href="../categories/pentesting.html" class="tag">Pentesting</a>
+            <a href="../categories/osint.html" class="tag">OSINT</a>
+            <a href="../categories/linux.html" class="tag">Linux</a>
+            <a href="../categories/python.html" class="tag">Python</a>
+            <a href="../categories/redes.html" class="tag">Redes</a>
+            <a href="../categories/certificaciones.html" class="tag">Certificaciones</a>
+            <a href="../categories/vulnerabilidades.html" class="tag">Vulnerabilidades</a>
+            <a href="../categories/herramientas.html" class="tag">Herramientas</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">{{SITE_NAME}} · {{AUTHOR_NAME}}</p>
+      <div class="footer-legal">
+        <a href="privacidad.html">Privacidad</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

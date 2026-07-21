@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aviso Legal | {{SITE_NAME}}</title>
+  <meta name="description" content="Aviso legal de {{SITE_NAME}}.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{SITE_URL}}/pages/aviso-legal.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Aviso Legal | {{SITE_NAME}}">
+  <meta property="og:description" content="Aviso legal de {{SITE_NAME}}.">
+  <meta property="og:url" content="{{SITE_URL}}/pages/aviso-legal.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de {{SITE_NAME}}</span>
+    <span>r3yv4j</span>
+  </div>
+</div>
+
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="{{BASE_PATH}}/" class="logo"><span class="logo-mark">~/</span>{{SITE_NAME}}</a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="{{BASE_PATH}}/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Ctrl+K</span></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main>
+
+<div class="article-header">
+  <div class="container">
+    <nav class="breadcrumbs"><a href="{{BASE_PATH}}/">Inicio</a><span class="sep">›</span><span class="current">Aviso legal</span></nav>
+    <h1 class="article-title">Aviso legal</h1>
+    <p class="article-subtitle">Última actualización: 1 de enero de 2024</p>
+  </div>
+</div>
+<div class="section">
+  <div class="container">
+    <article class="article-content" style="max-width:760px">
+      <h2 id="identificacion">1. Datos de identificación</h2>
+      <p>
+        <strong>Titular del sitio:</strong> {{AUTHOR_NAME}}<br>
+        <strong>Contacto:</strong> {{AUTHOR_EMAIL}}<br>
+        <strong>Dominio:</strong> {{SITE_URL}}
+      </p>
+
+      <h2 id="objeto">2. Objeto</h2>
+      <p>{{SITE_NAME}} es un blog educativo sobre ciberseguridad: pentesting, OSINT, redes, Linux, Python, certificaciones, vulnerabilidades y herramientas de seguridad.</p>
+
+      <h2 id="finalidad-educativa">3. Finalidad estrictamente educativa</h2>
+      <div class="callout callout-warning">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-content">
+          Todo el contenido publicado en este sitio (incluyendo scripts, comandos y técnicas de pentesting u OSINT) tiene una finalidad <strong>exclusivamente educativa y de divulgación</strong>. El autor no se hace responsable del uso indebido, ilegal o no autorizado que terceros puedan hacer de la información publicada. El lector es el único responsable de cumplir la legislación vigente en su jurisdicción antes de aplicar cualquier técnica descrita.
+        </div>
+      </div>
+
+      <h2 id="propiedad-intelectual">4. Propiedad intelectual</h2>
+      <p>Los contenidos, textos, imágenes, código y diseño de este sitio son propiedad de {{SITE_NAME}} salvo que se indique lo contrario, y están protegidos por la normativa de propiedad intelectual aplicable. Se permite citar fragmentos siempre que se enlace a la fuente original.</p>
+
+      <h2 id="enlaces">5. Enlaces externos</h2>
+      <p>Este sitio puede contener enlaces a páginas de terceros (herramientas, documentación, recursos). No nos hacemos responsables del contenido o las políticas de privacidad de dichos sitios externos.</p>
+
+      <h2 id="afiliacion">6. Enlaces de afiliación</h2>
+      <p>Algunos enlaces de este sitio pueden ser de afiliación: si compras a través de ellos, podemos recibir una pequeña comisión sin coste adicional para ti. Esto se indicará explícitamente cuando aplique.</p>
+
+      <h2 id="legislacion">7. Legislación aplicable</h2>
+      <p>Este aviso legal se rige por la legislación aplicable en España. Cualquier disputa se someterá a los tribunales competentes de dicha jurisdicción.</p>
+
+      <div class="highlight-box mt-3"><strong class="text-accent">Nota:</strong> sustituye los campos entre corchetes por tus datos reales antes de publicar el sitio.</div>
+    </article>
+  </div>
+</div>
+
+</main>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">{{SITE_NAME}} · {{AUTHOR_NAME}}</p>
+      <div class="footer-legal">
+        <a href="privacidad.html">Privacidad</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

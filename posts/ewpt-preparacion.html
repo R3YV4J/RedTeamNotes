@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Preparando la eWPT: lo que cubre y cómo lo estoy enfocando · RedTeamNotes</title>
+  <meta name="description" content="Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando.">
+  <meta name="keywords" content="eWPT, eLearnSecurity, certificaciones, pentesting web">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html">
+  <meta property="og:title" content="Preparando la eWPT: lo que cubre y cómo lo estoy enfocando · RedTeamNotes">
+  <meta property="og:description" content="Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-ewpt-preparacion.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-07-01">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Certificaciones">
+  <meta property="article:tag" content="eWPT, eLearnSecurity, certificaciones, pentesting web">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Preparando la eWPT: lo que cubre y cómo lo estoy enfocando">
+  <meta name="twitter:description" content="Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-ewpt-preparacion.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Preparando la eWPT: lo que cubre y cómo lo estoy enfocando",
+    "description": "Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-ewpt-preparacion.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-07-01",
+    "dateModified": "2026-07-01",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html"},
+    "articleSection": "Certificaciones",
+    "keywords": "eWPT, eLearnSecurity, certificaciones, pentesting web",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Certificaciones", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/certificaciones.html"},
+      {"@type": "ListItem", "position": 3, "name": "Preparando la eWPT: lo que cubre y cómo lo estoy enfocando", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/certificaciones.html">Certificaciones</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Preparando la eWPT: lo que cubre y cómo lo estoy enfocando</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-certificaciones">Certificaciones</span>
+      <span class="card-date">1 Julio 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Preparando la eWPT: lo que cubre y cómo lo estoy enfocando</h1>
+    <p class="article-subtitle">Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        1 Julio 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~2 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Intermedio
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#que-es-la-ewpt-y-por-que-despues-de-la-ejptv2">Qué es la eWPT y por qué después de la eJPTv2</a></li>
+<li><a href="#que-cubre-el-temario">Qué cubre el temario</a></li>
+<li><a href="#lo-que-mas-me-esta-costando-hasta-ahora">Lo que más me está costando hasta ahora</a></li>
+<li><a href="#como-estoy-practicando">Cómo estoy practicando</a></li>
+<li><a href="#cuando-espero-presentarme">Cuándo espero presentarme</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="que-es-la-ewpt-y-por-que-despues-de-la-ejptv2">Qué es la eWPT y por qué después de la eJPTv2</h2>
+<p>La eWPT (eLearnSecurity Web Application Penetration Tester) es un paso
+natural después de la eJPTv2 si quieres especializarte en aplicaciones web.
+Mientras la eJPTv2 toca todo un poco (redes, sistemas, web), la eWPT se
+centra específicamente en vulnerabilidades web y cómo explotarlas de forma
+metódica.</p>
+<p>Estoy en preparación ahora mismo, así que esto no es un "lo hice y te
+cuento" — es lo que voy aprendiendo mientras avanzo.</p>
+<h2 id="que-cubre-el-temario">Qué cubre el temario</h2>
+<p>El curso oficial de INE para la eWPT toca estas áreas principales:</p>
+<pre><code class="language-text">- Fundamentos de HTTP/HTTPS: métodos, headers, cookies, sesiones
+- Reconocimiento web: fingerprinting, enumeración de directorios
+- Vulnerabilidades de inyección: SQLi, XSS, XXE, SSTI
+- Vulnerabilidades de autenticación: broken auth, IDOR, JWT
+- Lógica de negocio: encontrar fallos que los escáneres no detectan
+- Burp Suite como herramienta principal de todo el proceso
+</code></pre>
+<p>La diferencia con la eJPTv2 en la parte web es notable: aquí no es "prueba
+este payload hasta que algo funcione", sino que hay un énfasis real en
+entender por qué funciona cada técnica y cómo confirmar el impacto real,
+no solo la existencia del fallo.</p>
+<h2 id="lo-que-mas-me-esta-costando-hasta-ahora">Lo que más me está costando hasta ahora</h2>
+<p>La lógica de negocio. Las vulnerabilidades de inyección tienen un patrón
+reconocible: pruebas, observas la respuesta, confirmas. Las vulnerabilidades
+de lógica de negocio dependen de entender qué se supone que hace la
+aplicación y qué asunciones incorrectas hace el desarrollador sobre cómo
+se va a usar. No hay un payload estándar para eso.</p>
+<p>También estoy dedicando bastante tiempo a Burp Suite más allá de lo básico —
+el Intruder y el Repeater los tenía bastante asumidos de la eJPTv2, pero
+el análisis manual de lógica de sesiones y JWT es territorio nuevo.</p>
+<h2 id="como-estoy-practicando">Cómo estoy practicando</h2>
+<p>Combino el material oficial de INE con los laboratorios de PortSwigger Web
+Security Academy, que son gratuitos y están organizados exactamente por los
+tipos de vulnerabilidades que cubre el temario. Para SQLi y XSS, PortSwigger
+tiene más variedad de escenarios que los laboratorios de INE, así que uso
+ambos en paralelo.</p>
+<p>También tengo montado un servidor vulnerable local (DVWA y WebGoat) para
+poder probar cosas sin depender de estar conectado a un laboratorio en la
+nube.</p>
+<h2 id="cuando-espero-presentarme">Cuándo espero presentarme</h2>
+<p>Próximamente. Cuando lo haga, actualizaré esto con cómo fue el examen real.
+Si ya lo aprobé cuando estás leyendo esto y no lo actualicé, es que me
+olvidé — o que no fue tan bien como esperaba y necesité tiempo para escribir
+sobre ello.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">eWPT</a>
+<a href="#" class="tag">eLearnSecurity</a>
+<a href="#" class="tag">certificaciones</a>
+<a href="#" class="tag">pentesting web</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#que-es-la-ewpt-y-por-que-despues-de-la-ejptv2">Qué es la eWPT y por qué después de la eJPTv2</a></li>
+<li><a href="#que-cubre-el-temario">Qué cubre el temario</a></li>
+<li><a href="#lo-que-mas-me-esta-costando-hasta-ahora">Lo que más me está costando hasta ahora</a></li>
+<li><a href="#como-estoy-practicando">Cómo estoy practicando</a></li>
+<li><a href="#cuando-espero-presentarme">Cuándo espero presentarme</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html&text=Preparando%20la%20eWPT:%20lo%20que%20cubre%20y%20cómo%20lo%20estoy%20enfocando" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "ewpt-preparacion";
+    const category = "certificaciones";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

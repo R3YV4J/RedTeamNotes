@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todas las notas | RedTeamNotes</title>
+  <meta name="description" content="Todas las notas de RedTeamNotes, organizadas por categoría: pentesting, OSINT, Linux, Python y más.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/pages/blog.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Blog | RedTeamNotes">
+  <meta property="og:description" content="Todas las notas de RedTeamNotes, organizadas por categoría: pentesting, OSINT, Linux, Python y más.">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/pages/blog.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>r3yv4j</span>
+  </div>
+</div>
+
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo"><span class="logo-mark">~/</span>RedTeamNotes</a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Ctrl+K</span></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main>
+
+<div class="article-header">
+  <div class="container">
+    <nav class="breadcrumbs"><a href="/RedTeamNotes/">Inicio</a><span class="sep">›</span><span class="current">Blog</span></nav>
+    <h1 class="article-title">Todas las notas</h1>
+    <p class="article-subtitle">Por categoría, o busca con Ctrl+K si sabes lo que quieres.</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="container">
+
+    <!-- Filtros por categoría -->
+    <div class="tag-cloud mb-3" id="category-filters" style="margin-bottom:2rem">
+      <button class="tag filter-active" data-filter="all" style="border-color:var(--border-accent);color:var(--accent)">Todos</button>
+      <button class="tag" data-filter="pentesting">Pentesting</button>
+      <button class="tag" data-filter="osint">OSINT</button>
+      <button class="tag" data-filter="redes">Redes</button>
+      <button class="tag" data-filter="linux">Linux</button>
+      <button class="tag" data-filter="python">Python</button>
+      <button class="tag" data-filter="certificaciones">Certificaciones</button>
+      <button class="tag" data-filter="vulnerabilidades">Vulnerabilidades</button>
+      <button class="tag" data-filter="herramientas">Herramientas</button>
+    </div>
+
+    <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true"></div>
+
+    <div class="grid-3" id="blog-articles-grid"></div>
+
+    <p id="blog-empty" class="text-muted font-mono text-center" style="display:none;padding:3rem 0">
+      No hay artículos en esta categoría todavía.
+    </p>
+
+    <nav class="pagination" id="blog-pagination" aria-label="Paginación de artículos"></nav>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const POSTS_PER_PAGE = 9;
+  let currentFilter = 'all';
+  let currentPage = 1;
+
+  const grid = document.getElementById('blog-articles-grid');
+  const empty = document.getElementById('blog-empty');
+  const pagination = document.getElementById('blog-pagination');
+  const filterBtns = document.querySelectorAll('#category-filters .tag');
+
+  function getFiltered() {
+    const all = (window.POSTS_INDEX || []).slice().sort((a,b) => b.date.localeCompare(a.date));
+    return currentFilter === 'all' ? all : all.filter(p => p.categorySlug === currentFilter);
+  }
+
+  function render() {
+    const posts = getFiltered();
+    const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+    currentPage = Math.min(currentPage, totalPages);
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    const pagePosts = posts.slice(start, start + POSTS_PER_PAGE);
+
+    if (!pagePosts.length) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = 'none';
+      grid.innerHTML = pagePosts.map(p => `
+        <article class="card">
+          <div class="card-image">
+            <div class="card-image-placeholder">§</div>
+            <span class="card-category cat-${p.categorySlug}">${p.category}</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title"><a href="../${p.url}">${p.title}</a></h3>
+            <p class="card-excerpt">${p.excerpt}</p>
+            <div class="card-meta">
+              <span class="card-date">${p.dateHuman}</span>
+              <span class="card-read-time">⏱ ${p.readTime}</span>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Pagination buttons
+    if (totalPages <= 1) {
+      pagination.innerHTML = '';
+    } else {
+      let html = '';
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+      pagination.innerHTML = html;
+      pagination.querySelectorAll('.page-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentPage = parseInt(btn.dataset.page);
+          render();
+          window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+        });
+      });
+    }
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => { b.style.borderColor = ''; b.style.color = ''; });
+      btn.style.borderColor = 'var(--border-accent)';
+      btn.style.color = 'var(--accent)';
+      currentFilter = btn.dataset.filter;
+      currentPage = 1;
+      render();
+    });
+  });
+
+  render();
+});
+</script>
+
+</main>
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · R3yv4j</p>
+      <div class="footer-legal">
+        <a href="privacidad.html">Privacidad</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Página no encontrada | {{SITE_NAME}}</title>
+  <meta name="description" content="La página que buscas no existe o ha sido movida.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="{{SITE_URL}}/404.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{{BASE_PATH}}/assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="{{BASE_PATH}}/assets/images/favicon.svg">
+</head>
+<body>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de {{SITE_NAME}}</span>
+    <span>r3yv4j</span>
+  </div>
+</div>
+
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="{{BASE_PATH}}/" class="logo" aria-label="{{SITE_NAME}} inicio">
+        <span class="logo-mark">~/</span>{{SITE_NAME}}
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="{{BASE_PATH}}/">Inicio</a></li>
+          <li><a href="{{BASE_PATH}}/categories/pentesting.html">Pentesting</a></li>
+          <li><a href="{{BASE_PATH}}/categories/osint.html">OSINT</a></li>
+          <li><a href="{{BASE_PATH}}/categories/linux.html">Linux</a></li>
+          <li><a href="{{BASE_PATH}}/categories/python.html">Python</a></li>
+          <li><a href="{{BASE_PATH}}/pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Ctrl+K</span></button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="page-404">
+  <div class="font-mono text-accent" style="font-size:0.85rem;margin-bottom:1rem">
+    $ curl -I {{SITE_URL}}{{requested_path}}
+  </div>
+  <div class="error-code">404</div>
+  <h1 style="margin-bottom:0.75rem">Acceso denegado al recurso</h1>
+  <p class="error-message">
+    Esta ruta no existe en el servidor, ha sido movida o el payload no encontró su objetivo.<br>
+    Como buen pentester, vuelve a la base y reintenta el reconocimiento.
+  </p>
+  <div class="hero-actions" style="justify-content:center">
+    <a href="{{BASE_PATH}}/" class="btn btn-primary">← Volver al inicio</a>
+    <button data-search-open class="btn btn-outline">Buscar contenido</button>
+  </div>
+
+  <div class="terminal" style="max-width:520px;margin-top:3rem;text-align:left">
+    <div class="terminal-bar">
+      <div class="terminal-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+      <div class="terminal-title">error.log</div>
+    </div>
+    <div class="terminal-body">
+      <div class="terminal-line"><span class="t-error">[ERROR]</span><span class="t-output">&nbsp;HTTP/1.1 404 Not Found</span></div>
+      <div class="terminal-line"><span class="t-output">[INFO] Recurso no indexado en el servidor</span></div>
+      <div class="terminal-line"><span class="t-success">[TIP]</span><span class="t-output">&nbsp;Prueba /sitemap.xml para ver rutas válidas</span></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">{{SITE_NAME}} · {{AUTHOR_NAME}}</p>
+      <div class="footer-legal">
+        <a href="{{BASE_PATH}}/pages/privacidad.html">Privacidad</a>
+        <a href="{{BASE_PATH}}/pages/cookies.html">Cookies</a>
+        <a href="{{BASE_PATH}}/pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<script src="{{BASE_PATH}}/assets/js/posts-index.js" defer></script>
+<script src="{{BASE_PATH}}/assets/js/main.js" defer></script>
+</body>
+</html>

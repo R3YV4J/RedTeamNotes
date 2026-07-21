@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fafaf8">
+
+  <title>{{SITE_NAME}} — notas de pentesting y seguridad ofensiva</title>
+  <meta name="description" content="Notas técnicas sobre pentesting, OSINT, Linux y Python. Comandos reales, errores comunes y lo que aprendo usando estas herramientas, escrito por {{AUTHOR_NAME}}.">
+  <meta name="keywords" content="pentesting, OSINT, hacking ético, ciberseguridad, kali linux, CTF, red team">
+  <meta name="author" content="{{AUTHOR_NAME}}">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="{{SITE_URL}}/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{SITE_URL}}/">
+  <meta property="og:title" content="{{SITE_NAME}} — notas de pentesting y seguridad ofensiva">
+  <meta property="og:description" content="Notas técnicas sobre pentesting, OSINT, Linux y Python, escritas por {{AUTHOR_NAME}}.">
+  <meta property="og:image" content="{{SITE_URL}}/assets/images/og-home.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="{{SITE_NAME}}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{SITE_NAME}} — notas de pentesting y seguridad ofensiva">
+  <meta name="twitter:description" content="Notas técnicas sobre pentesting, OSINT, Linux y Python, escritas por {{AUTHOR_NAME}}.">
+  <meta name="twitter:image" content="{{SITE_URL}}/assets/images/og-home.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{SITE_NAME}}",
+    "url": "{{SITE_URL}}/",
+    "description": "Notas técnicas de pentesting, OSINT, Linux y Python escritas por {{AUTHOR_NAME}}",
+    "inLanguage": "es",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{SITE_URL}}/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="alternate" type="application/rss+xml" title="{{SITE_NAME}} RSS" href="{{BASE_PATH}}/feed.xml">
+
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de {{SITE_NAME}}</span>
+    <span>r3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="{{BASE_PATH}}/" class="logo" aria-label="{{SITE_NAME}} - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>{{SITE_NAME}}
+      </a>
+
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="{{BASE_PATH}}/" class="active">Inicio</a></li>
+          <li><a href="categories/pentesting.html">Pentesting</a></li>
+          <li><a href="categories/osint.html">OSINT</a></li>
+          <li><a href="categories/linux.html">Linux</a></li>
+          <li><a href="categories/python.html">Python</a></li>
+          <li><a href="pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Abrir búsqueda">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú móvil">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ HERO ============ -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-tag" aria-hidden="true">cuaderno de laboratorio — actualizado a mano</div>
+        <h1 id="hero-title">
+          Notas de pentesting<br>
+          <span class="highlight">sin relleno</span>
+        </h1>
+        <p class="hero-desc">
+          Esto es básicamente mi cuaderno pasado a limpio. Nmap, escalada de
+          privilegios, OSINT, scripts de Python que escribo para no repetir
+          lo mismo a mano. Con los comandos que uso de verdad y los errores
+          en los que me he metido por el camino.
+        </p>
+        <div class="hero-actions">
+          <a href="#latest-articles" class="btn btn-primary">Ver notas</a>
+          <a href="pages/sobre-mi.html" class="btn btn-outline">Qué es esto →</a>
+        </div>
+      </div>
+
+      <div class="terminal" role="img" aria-label="Extracto de log de un escaneo real">
+        <div class="terminal-bar">
+          <div class="terminal-title">extracto — sesión de reconocimiento</div>
+        </div>
+        <div class="terminal-body" id="hero-terminal" aria-live="off"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LATEST ARTICLES ============ -->
+<section class="section" id="latest-articles" aria-labelledby="latest-title">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title" id="latest-title"><span class="prefix">//</span>Últimas notas</h2>
+      <a href="pages/blog.html" class="section-link">índice completo →</a>
+    </div>
+
+    <div class="ad-slot ad-slot-leaderboard" style="display:none" aria-hidden="true"></div>
+
+    <div class="grid-3" id="latest-articles-grid">
+      <p class="text-muted font-mono" style="grid-column:1/-1">Cargando notas...</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATEGORIES ============ -->
+<section class="section" aria-labelledby="categories-title">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title" id="categories-title"><span class="prefix">//</span>Categorías</h2>
+    </div>
+    <div class="categories-grid">
+      <a href="categories/pentesting.html" class="category-card">
+        <div class="category-icon">01 · pentesting</div>
+        <div class="category-name">Pentesting</div>
+        <div class="category-count">Recon · explotación · post-explotación</div>
+      </a>
+      <a href="categories/osint.html" class="category-card">
+        <div class="category-icon">02 · osint</div>
+        <div class="category-name">OSINT</div>
+        <div class="category-count">Reconocimiento pasivo</div>
+      </a>
+      <a href="categories/redes.html" class="category-card">
+        <div class="category-icon">03 · redes</div>
+        <div class="category-name">Redes</div>
+        <div class="category-count">TCP/IP · análisis de tráfico</div>
+      </a>
+      <a href="categories/linux.html" class="category-card">
+        <div class="category-icon">04 · linux</div>
+        <div class="category-name">Linux</div>
+        <div class="category-count">Administración orientada a seguridad</div>
+      </a>
+      <a href="categories/python.html" class="category-card">
+        <div class="category-icon">05 · python</div>
+        <div class="category-name">Python</div>
+        <div class="category-count">Scripts propios de automatización</div>
+      </a>
+      <a href="categories/certificaciones.html" class="category-card">
+        <div class="category-icon">06 · certificaciones</div>
+        <div class="category-name">Certificaciones</div>
+        <div class="category-count">OSCP, CEH y similares</div>
+      </a>
+      <a href="categories/vulnerabilidades.html" class="category-card">
+        <div class="category-icon">07 · vulnerabilidades</div>
+        <div class="category-name">Vulnerabilidades</div>
+        <div class="category-count">Lectura de CVEs, priorización</div>
+      </a>
+      <a href="categories/herramientas.html" class="category-card">
+        <div class="category-icon">08 · herramientas</div>
+        <div class="category-name">Herramientas</div>
+        <div class="category-count">Uso real, con sus límites</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ALL ARTICLES + SIDEBAR ============ -->
+<section class="section" aria-labelledby="all-title">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <div>
+        <div class="section-header">
+          <h2 class="section-title" id="all-title"><span class="prefix">//</span>Todas las notas</h2>
+        </div>
+
+        <div class="grid-2" id="all-articles-grid"></div>
+
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-top:2rem" aria-hidden="true"></div>
+      </div>
+
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral">
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice rápido</div>
+          <ul class="popular-list" id="sidebar-article-list"></ul>
+        </div>
+
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true"></div>
+
+        <div class="sidebar-widget">
+          <div class="widget-title">Etiquetas</div>
+          <div class="tag-cloud" id="sidebar-tag-cloud"></div>
+        </div>
+
+        <div class="sidebar-widget">
+          <div class="widget-title">Quién escribe esto</div>
+          <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.6;margin-bottom:0">
+            {{AUTHOR_NAME}}. Pentesting y red team. <a href="pages/sobre-mi.html">Más sobre el blog →</a>
+          </p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="{{BASE_PATH}}/" class="logo" aria-label="{{SITE_NAME}} inicio"><span class="logo-mark">~/</span>{{SITE_NAME}}</a>
+        <p class="footer-desc">
+          Notas de pentesting, OSINT, Linux y Python. Escrito por {{AUTHOR_NAME}} para
+          tener esto ordenado y, de paso, que le sirva a alguien más.
+        </p>
+        <div style="display:flex;gap:0.75rem">
+          <a href="{{AUTHOR_GITHUB}}" target="_blank" rel="noopener" class="tag">GitHub</a>
+          <a href="{{AUTHOR_LINKEDIN}}" target="_blank" rel="noopener" class="tag">LinkedIn</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Categorías</div>
+        <ul class="footer-links">
+          <li><a href="categories/pentesting.html">Pentesting</a></li>
+          <li><a href="categories/osint.html">OSINT</a></li>
+          <li><a href="categories/redes.html">Redes</a></li>
+          <li><a href="categories/linux.html">Linux</a></li>
+          <li><a href="categories/python.html">Python</a></li>
+          <li><a href="categories/certificaciones.html">Certificaciones</a></li>
+          <li><a href="categories/vulnerabilidades.html">Vulnerabilidades</a></li>
+          <li><a href="categories/herramientas.html">Herramientas</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-heading">Blog</div>
+        <ul class="footer-links">
+          <li><a href="pages/blog.html">Todas las notas</a></li>
+          <li><a href="pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links">
+          <li><a href="pages/privacidad.html">Política de privacidad</a></li>
+          <li><a href="pages/cookies.html">Política de cookies</a></li>
+          <li><a href="pages/aviso-legal.html">Aviso legal</a></li>
+        </ul>
+        <div style="margin-top:1.1rem">
+          <div class="footer-heading">Aviso</div>
+          <p style="font-size:0.75rem;color:var(--text-faint);line-height:1.5;font-family:var(--font-serif)">
+            Contenido educativo. Lo que se describe aquí es para usarlo en
+            sistemas propios o con autorización explícita.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">{{SITE_NAME}} · {{AUTHOR_NAME}}</p>
+      <div class="footer-legal">
+        <a href="pages/privacidad.html">Privacidad</a>
+        <a href="pages/cookies.html">Cookies</a>
+        <a href="pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ SEARCH OVERLAY ============ -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar notas, categorías, herramientas..." autocomplete="off" spellcheck="false" aria-label="Buscar en el blog">
+      <button id="search-close" class="search-close" aria-label="Cerrar búsqueda">✕</button>
+    </div>
+    <ul id="search-results" class="search-results" role="listbox" aria-label="Resultados de búsqueda"></ul>
+    <p style="text-align:center;font-family:var(--font-mono);font-size:0.72rem;color:var(--text-faint);margin-top:1rem">
+      ↑↓ navegar · Enter seleccionar · Esc cerrar
+    </p>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<div id="cookie-banner" class="cookie-banner" role="region" aria-label="Aviso de cookies">
+  <div class="cookie-inner">
+    <p class="cookie-text">Este sitio usa cookies básicas de analítica. Más detalle en la <a href="pages/cookies.html">política de cookies</a>.</p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="padding:0.4rem 0.75rem;font-size:0.8rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="padding:0.4rem 0.75rem;font-size:0.8rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/posts-index.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const posts = (window.POSTS_INDEX || []).slice().sort((a, b) => b.date.localeCompare(a.date));
+
+    function cardHTML(p, featured = false) {
+      // Siempre genera la card con placeholder.
+      // loadCoverImages() intentará cargar la imagen real después.
+      return `
+        <article class="card ${featured ? 'card-featured' : ''}" itemscope itemtype="https://schema.org/BlogPosting">
+          <div class="card-image" id="img-cover-${p.slug}">
+            <div class="card-image-placeholder" data-lines="${p.categorySlug}" aria-hidden="true"></div>
+            <span class="card-category cat-${p.categorySlug}">${p.category}</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title" itemprop="headline"><a href="${p.url}" itemprop="url">${p.title}</a></h3>
+            <p class="card-excerpt" itemprop="description">${p.excerpt}</p>
+            <div class="card-meta">
+              <span class="card-date" itemprop="datePublished" content="${p.date}">${p.dateHuman}</span>
+              <span class="card-read-time">${p.readTime}</span>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function loadCoverImages(posts) {
+      // Para cada artículo, prueba jpeg → jpg → png en ese orden.
+      // Si encuentra una, la aplica como fondo. Si no, queda el placeholder.
+      const base = `{{BASE_PATH}}/assets/images`;
+      posts.forEach(p => {
+        const container = document.getElementById(`img-cover-${p.slug}`);
+        if (!container) return;
+        const exts = ['jpeg', 'jpg', 'png'];
+        let tried = 0;
+        function tryNext() {
+          if (tried >= exts.length) return;
+          const ext = exts[tried++];
+          const img = new Image();
+          img.onload = () => {
+            container.style.backgroundImage = `url('${base}/cover-${p.slug}.${ext}')`;
+            container.classList.add('has-cover');
+            const ph = container.querySelector('.card-image-placeholder');
+            if (ph) ph.style.display = 'none';
+          };
+          img.onerror = tryNext;
+          img.src = `${base}/cover-${p.slug}.${ext}`;
+        }
+        tryNext();
+      });
+    }
+
+    const latestGrid = document.getElementById('latest-articles-grid');
+    latestGrid.innerHTML = posts.slice(0, 3).map(p => cardHTML(p)).join('') ||
+      '<p class="text-muted font-mono" style="grid-column:1/-1">Todavía no hay notas publicadas.</p>';
+
+    const allGrid = document.getElementById('all-articles-grid');
+    allGrid.innerHTML = posts.map((p, i) => cardHTML(p, i === 0)).join('');
+
+    // Cargar portadas después de que las cards estén en el DOM
+    loadCoverImages(posts);
+
+    const sidebarList = document.getElementById('sidebar-article-list');
+    sidebarList.innerHTML = posts.slice(0, 6).map((p, i) => `
+      <li class="popular-item">
+        <span class="popular-num">${String(i + 1).padStart(2, '0')}</span>
+        <span class="popular-title"><a href="${p.url}">${p.title}</a></span>
+      </li>
+    `).join('');
+
+    const tagCounts = {};
+    posts.forEach(p => (p.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+    const topTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 14);
+    document.getElementById('sidebar-tag-cloud').innerHTML = topTags.map(t => `<span class="tag">${t}</span>`).join('');
+  });
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "{{SITE_URL}}/"}]
+}
+</script>
+</body>
+</html>

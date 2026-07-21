@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RedTeamNotes</title>
+    <link>https://r3yv4j.github.io/RedTeamNotes/</link>
+    <description>Notas técnicas sobre pentesting, OSINT, Linux y Python. Sin relleno, con comandos reales y los errores que me he encontrado por el camino.</description>
+    <language>es</language>
+    <atom:link href="https://r3yv4j.github.io/RedTeamNotes/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Preparando la eWPT: lo que cubre y cómo lo estoy enfocando</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/ewpt-preparacion.html</guid>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+      <description>Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando.</description>
+      <category>Certificaciones</category>
+    </item>
+    <item>
+      <title>CompTIA Security+: ¿merece la pena antes del OSCP?</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/comptia-security-plus-vs-oscp.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/comptia-security-plus-vs-oscp.html</guid>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Por qué hice el Security+ antes de lanzarme al OSCP, qué cubre realmente, y en qué se diferencia de una certificación práctica de pentesting.</description>
+      <category>Certificaciones</category>
+    </item>
+    <item>
+      <title>eJPTv2: lo que aprendes de verdad preparándola y lo que no esperaba del examen</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/ejptv2-preparacion-experiencia.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/ejptv2-preparacion-experiencia.html</guid>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 +0000</pubDate>
+      <description>Mi experiencia con la eJPTv2 de eLearnSecurity: qué cubre, cómo es el examen real, y por qué es mejor punto de entrada que el Security+ si ya sabes algo de redes.</description>
+      <category>Certificaciones</category>
+    </item>
+    <item>
+      <title>SSH tunneling: cómo pivoto cuando el objetivo no tiene salida directa</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/ssh-tunneling-pivoting.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/ssh-tunneling-pivoting.html</guid>
+      <pubDate>Wed, 27 May 2026 00:00:00 +0000</pubDate>
+      <description>Port forwarding local, remoto y dinámico con SSH, y el caso en el que confundí -L con -R y perdí media hora en una máquina de HTB.</description>
+      <category>Redes</category>
+    </item>
+    <item>
+      <title>Escalada de privilegios en Linux: lo que reviso en orden</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/linux-privilege-escalation.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/linux-privilege-escalation.html</guid>
+      <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
+      <description>El orden que sigo para escalar privilegios en Linux: SUID, sudo, cron, capabilities, y el caso real donde LinPEAS no encontró nada y tocó ir a mano.</description>
+      <category>Linux</category>
+    </item>
+    <item>
+      <title>Bash para enumeración: el script que reutilizo en cada máquina</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/bash-scripting-enumeracion.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/bash-scripting-enumeracion.html</guid>
+      <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
+      <description>El script bash que monto al ganar acceso a una máquina para enumerar lo básico, y por qué dejé de usar uno descargado de internet sin entenderlo.</description>
+      <category>Linux</category>
+    </item>
+    <item>
+      <title>Metasploit: cómo usarlo sin perderse en la primera semana</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/metasploit-primeros-pasos.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/metasploit-primeros-pasos.html</guid>
+      <pubDate>Thu, 02 Apr 2026 00:00:00 +0000</pubDate>
+      <description>Lo básico de Metasploit que necesitas entender antes de lanzar cualquier exploit: módulos, opciones, payloads y por qué msfconsole se cierra solo a veces.</description>
+      <category>Herramientas</category>
+    </item>
+    <item>
+      <title>Los scripts de Python que reescribo en cada pentest</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/python-hacking-scripts.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/python-hacking-scripts.html</guid>
+      <pubDate>Thu, 02 Apr 2026 00:00:00 +0000</pubDate>
+      <description>Port scanner multihilo, verificación de subdominios y por qué mi primer intento con threading se quedó colgado sin avisar.</description>
+      <category>Python</category>
+    </item>
+    <item>
+      <title>Leer un CVE sin perderse: lo que miro y en qué orden</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/como-analizar-cve-metodologia.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/como-analizar-cve-metodologia.html</guid>
+      <pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Cómo decido si un CVE me afecta de verdad: leer el advisory antes que el exploit, entender el CVSS y por qué la lista CISA KEV pesa más que la nota.</description>
+      <category>Vulnerabilidades</category>
+    </item>
+    <item>
+      <title>Burp Suite: cómo lo uso en una auditoría web real</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/burp-suite-guia-esencial.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/burp-suite-guia-esencial.html</guid>
+      <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
+      <description>El flujo que sigo con Burp Suite Community para encontrar IDORs y otros fallos web, y por qué la versión gratuita se queda corta en cierto punto.</description>
+      <category>Herramientas</category>
+    </item>
+    <item>
+      <title>Google Dorking: encontrar información pública que nadie quiso exponer</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/google-dorking-osint.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/google-dorking-osint.html</guid>
+      <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
+      <description>Cómo uso operadores de búsqueda avanzados de Google para encontrar paneles de administración, archivos expuestos y configuraciones olvidadas sin tocar nada.</description>
+      <category>OSINT</category>
+    </item>
+    <item>
+      <title>Kali Linux: lo primero que configuro después de instalarlo</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/kali-linux-primeros-pasos.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/kali-linux-primeros-pasos.html</guid>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+      <description>Qué hago nada más instalar Kali Linux antes de empezar a practicar: actualizaciones, herramientas que faltan, y errores típicos al principio.</description>
+      <category>Linux</category>
+    </item>
+    <item>
+      <title>Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html</guid>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+      <description>Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.</description>
+      <category>OSINT</category>
+    </item>
+    <item>
+      <title>theHarvester: el primer comando que lanzo en cualquier reconocimiento</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html</guid>
+      <pubDate>Thu, 05 Feb 2026 00:00:00 +0000</pubDate>
+      <description>Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.</description>
+      <category>OSINT</category>
+    </item>
+    <item>
+      <title>Nmap en condiciones: lo que uso de verdad en un pentest</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html</guid>
+      <pubDate>Fri, 23 Jan 2026 00:00:00 +0000</pubDate>
+      <description>Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.</description>
+      <category>Pentesting</category>
+    </item>
+    <item>
+      <title>Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html</guid>
+      <pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
+      <description>Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar &#x27;todo&#x27; en una red grande es mala idea.</description>
+      <category>Redes</category>
+    </item>
+  </channel>
+</rss>

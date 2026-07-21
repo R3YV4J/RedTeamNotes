@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Nmap en condiciones: lo que uso de verdad en un pentest · RedTeamNotes</title>
+  <meta name="description" content="Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.">
+  <meta name="keywords" content="nmap, pentesting, escaneo de puertos, NSE, kali linux, recon">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html">
+  <meta property="og:title" content="Nmap en condiciones: lo que uso de verdad en un pentest · RedTeamNotes">
+  <meta property="og:description" content="Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-guia-nmap-completa.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-01-23">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Pentesting">
+  <meta property="article:tag" content="nmap, pentesting, escaneo de puertos, NSE, kali linux, recon">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nmap en condiciones: lo que uso de verdad en un pentest">
+  <meta name="twitter:description" content="Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-guia-nmap-completa.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Nmap en condiciones: lo que uso de verdad en un pentest",
+    "description": "Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-guia-nmap-completa.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-01-23",
+    "dateModified": "2026-01-23",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html"},
+    "articleSection": "Pentesting",
+    "keywords": "nmap, pentesting, escaneo de puertos, NSE, kali linux, recon",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Pentesting", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/pentesting.html"},
+      {"@type": "ListItem", "position": 3, "name": "Nmap en condiciones: lo que uso de verdad en un pentest", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/pentesting.html">Pentesting</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Nmap en condiciones: lo que uso de verdad en un pentest</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-pentesting">Pentesting</span>
+      <span class="card-date">23 Enero 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Nmap en condiciones: lo que uso de verdad en un pentest</h1>
+    <p class="article-subtitle">Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        23 Enero 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~5 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Principiante → Avanzado
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#el-error-que-mas-se-repite-con-nmap">El error que más se repite con Nmap</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#fase-1-descubrir-que-hay-vivo">Fase 1: descubrir qué hay vivo</a></li>
+<li><a href="#fase-2-el-escaneo-que-realmente-importa">Fase 2: el escaneo que realmente importa</a></li>
+<li><a href="#la-trampa-de-open-filtered">La trampa de open|filtered</a></li>
+<li><a href="#scripts-nse-que-uso-de-verdad">Scripts NSE que uso de verdad</a></li>
+<li><a href="#evasion-cuando-merece-la-pena-y-cuando-no">Evasión: cuándo merece la pena y cuándo no</a></li>
+<li><a href="#guardar-resultados-y-por-que-el-xml-importa">Guardar resultados (y por qué el XML importa)</a></li>
+<li><a href="#lo-que-no-cambiaria-de-esta-metodologia">Lo que no cambiaría de esta metodología</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="el-error-que-mas-se-repite-con-nmap">El error que más se repite con Nmap</h2>
+<p>La primera vez que escaneé algo "en serio" lancé <code>nmap 192.168.1.1</code> a secas,
+vi tres puertos abiertos, y seguí con la auditoría como si esos tres puertos
+fueran todo lo que había. No lo eran. Sin <code>-p-</code>, Nmap solo mira los 1000
+puertos más comunes. Me faltó un servicio en el puerto 8443 que tenía
+exactamente la vulnerabilidad que necesitaba.</p>
+<p>Desde entonces tengo un orden fijo para no repetir ese error, y es básicamente
+de eso va este artículo: no una lista de todos los flags que existen, sino
+los que uso en cada fase y por qué.</p>
+<h2 id="instalacion">Instalación</h2>
+<p>En Kali y Parrot ya viene. En Debian/Ubuntu:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install nmap -y
+nmap --version
+</code></pre>
+<p>Si vas a compilar desde fuente porque necesitas una versión más reciente que
+la del repositorio (pasa más de lo que debería, sobre todo con scripts NSE
+nuevos), el proceso estándar de <code>./configure &amp;&amp; make &amp;&amp; make install</code>
+funciona, pero asegúrate de tener <code>libssl-dev</code> instalado antes o la
+detección de servicios SSL falla en silencio.</p>
+<h2 id="fase-1-descubrir-que-hay-vivo">Fase 1: descubrir qué hay vivo</h2>
+<p>Antes de escanear puertos, conviene saber qué responde. En una red <code>/24</code>
+completa, lanzar <code>-p-</code> contra 254 hosts es lento y casi siempre innecesario:</p>
+<pre><code class="language-bash">sudo nmap -sn 192.168.1.0/24
+</code></pre>
+<p>Esto es un ping scan, no toca puertos. La salida te da una lista de hosts
+vivos sin perder tiempo. El truco: en redes con firewall agresivo, <code>-sn</code>
+puede dar falsos negativos porque bloquean ICMP. Si sospechas que te falta
+algo, repite con <code>-PS22,80,443</code> para forzar un SYN a esos puertos como señal
+de vida en vez de depender del ping.</p>
+<h2 id="fase-2-el-escaneo-que-realmente-importa">Fase 2: el escaneo que realmente importa</h2>
+<p>Esto es lo que lanzo casi siempre como primer escaneo serio:</p>
+<pre><code class="language-bash">sudo nmap -sV -sC -p- -T4 -oA full_scan 192.168.1.1
+</code></pre>
+<p>Desglosado:</p>
+<ul>
+<li><strong><code>-sV</code></strong> detección de versión. Sin esto ves el puerto abierto pero no
+  sabes si es Apache 2.4.52 o nginx 1.24 — y la versión es lo que te dice
+  si hay un CVE aplicable.</li>
+<li><strong><code>-sC</code></strong> scripts por defecto. Bastante ruido a veces, pero detecta cosas
+  como vhosts ocultos en HTTP o anon login en FTP sin que tengas que
+  pedirlo explícitamente.</li>
+<li><strong><code>-p-</code></strong> todos los puertos, no los 1000 de siempre. Esto es lo que me
+  faltó la primera vez que escribí arriba.</li>
+<li><strong><code>-T4</code></strong> velocidad agresiva. En redes internas está bien; contra
+  infraestructura con WAF o rate limiting, bájalo a <code>-T2</code> o vas a empezar
+  a ver <code>filtered</code> en puertos que en realidad están abiertos.</li>
+<li><strong><code>-oA full_scan</code></strong> guarda en los tres formatos (<code>.nmap</code>, <code>.xml</code>, <code>.gnmap</code>).
+  El XML es el que vas a querer si luego importas esto a otra herramienta.</li>
+</ul>
+<h2 id="la-trampa-de-open-filtered">La trampa de <code>open|filtered</code></h2>
+<p>Si ves esto en la salida, no es un puerto a medias — es que Nmap no pudo
+determinar el estado con certeza, normalmente porque no llegó respuesta y no
+sabe si es porque el puerto está cerrado o porque algo lo está filtrando.
+Pasa mucho con UDP:</p>
+<pre><code class="language-bash">sudo nmap -sU --top-ports 100 192.168.1.1
+</code></pre>
+<p>UDP es no orientado a conexión, así que Nmap no tiene un ACK que confirmar.
+Si necesitas certeza en un puerto UDP específico, mándale un payload que el
+servicio espere (por ejemplo, una query DNS al puerto 53) en vez de fiarte
+del escaneo genérico.</p>
+<h2 id="scripts-nse-que-uso-de-verdad">Scripts NSE que uso de verdad</h2>
+<p>De los 600+ scripts que trae Nmap, en el día a día repito un puñado:</p>
+<pre><code class="language-bash"># Vulnerabilidades conocidas, rápido de lanzar contra puertos ya identificados
+nmap --script=vuln -p 80,443,445 192.168.1.1
+
+# SMB — esto te dice en diez segundos si hay algo tipo EternalBlue
+nmap --script=smb-vuln* -p 445 192.168.1.1
+
+# Enumeración HTTP básica (vhosts, headers, métodos permitidos)
+nmap --script=http-title,http-headers,http-methods -p 80,443 192.168.1.1
+</code></pre>
+<p><code>--script=vuln</code> es cómodo pero genera falsos positivos con cierta frecuencia
+— te marca algo como vulnerable basándose solo en la versión reportada, sin
+confirmar el comportamiento real. Tómalo como punto de partida para
+investigar, no como confirmación.</p>
+<h2 id="evasion-cuando-merece-la-pena-y-cuando-no">Evasión: cuándo merece la pena y cuándo no</h2>
+<p>En un pentest con alcance autorizado y sin necesidad de sigilo, evadir nada
+es perder tiempo. Pero si el ejercicio incluye evaluar detección (red team
+de verdad, no solo "encuentra vulnerabilidades"):</p>
+<pre><code class="language-bash"># Fragmentación de paquetes
+sudo nmap -f 192.168.1.1
+
+# Bajar la velocidad para no disparar umbrales de IDS
+nmap -T2 192.168.1.1
+
+# Decoys — ojo, esto genera mucho ruido y a veces delata más que ayuda
+sudo nmap -D RND:10 192.168.1.1
+</code></pre>
+<p>El decoy con <code>-D</code> suena bien en teoría pero en redes pequeñas es bastante
+obvio: si el rango de IPs decoy no es plausible para esa red, el analista
+del otro lado lo detecta de inmediato. Lo uso poco.</p>
+<h2 id="guardar-resultados-y-por-que-el-xml-importa">Guardar resultados (y por qué el XML importa)</h2>
+<pre><code class="language-bash">nmap -oA resultados 192.168.1.1
+</code></pre>
+<p>El <code>.gnmap</code> parece útil para grep rápido pero está deprecado en la práctica
+— mejor te acostumbras a parsear el XML con <code>xml.etree</code> en Python o con
+herramientas como <code>nmap-parse-output</code> si necesitas automatizar algo.</p>
+<h2 id="lo-que-no-cambiaria-de-esta-metodologia">Lo que no cambiaría de esta metodología</h2>
+<p><code>-sn</code> para descubrir, <code>-sV -sC -p- -T4 -oA</code> como escaneo base, y scripts NSE
+específicos según lo que aparezca. No hay magia adicional — el 90% del valor
+de Nmap está en no saltarte el <code>-p-</code> y en leer la salida con calma en vez de
+lanzar el comando y pasar al siguiente paso sin revisar qué dijo.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">nmap</a>
+<a href="#" class="tag">pentesting</a>
+<a href="#" class="tag">escaneo de puertos</a>
+<a href="#" class="tag">NSE</a>
+<a href="#" class="tag">kali linux</a>
+<a href="#" class="tag">recon</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#el-error-que-mas-se-repite-con-nmap">El error que más se repite con Nmap</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#fase-1-descubrir-que-hay-vivo">Fase 1: descubrir qué hay vivo</a></li>
+<li><a href="#fase-2-el-escaneo-que-realmente-importa">Fase 2: el escaneo que realmente importa</a></li>
+<li><a href="#la-trampa-de-open-filtered">La trampa de open|filtered</a></li>
+<li><a href="#scripts-nse-que-uso-de-verdad">Scripts NSE que uso de verdad</a></li>
+<li><a href="#evasion-cuando-merece-la-pena-y-cuando-no">Evasión: cuándo merece la pena y cuándo no</a></li>
+<li><a href="#guardar-resultados-y-por-que-el-xml-importa">Guardar resultados (y por qué el XML importa)</a></li>
+<li><a href="#lo-que-no-cambiaria-de-esta-metodologia">Lo que no cambiaría de esta metodología</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html&text=Nmap%20en%20condiciones:%20lo%20que%20uso%20de%20verdad%20en%20un%20pentest" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "guia-nmap-completa";
+    const category = "pentesting";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

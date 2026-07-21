@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura · RedTeamNotes</title>
+  <meta name="description" content="Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar &#x27;todo&#x27; en una red grande es mala idea.">
+  <meta name="keywords" content="wireshark, redes, análisis de tráfico">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html">
+  <meta property="og:title" content="Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura · RedTeamNotes">
+  <meta property="og:description" content="Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar &#x27;todo&#x27; en una red grande es mala idea.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-wireshark-analisis-trafico.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-01-08">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Redes">
+  <meta property="article:tag" content="wireshark, redes, análisis de tráfico">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura">
+  <meta name="twitter:description" content="Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar &#x27;todo&#x27; en una red grande es mala idea.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-wireshark-analisis-trafico.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura",
+    "description": "Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar 'todo' en una red grande es mala idea.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-wireshark-analisis-trafico.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-01-08",
+    "dateModified": "2026-01-08",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html"},
+    "articleSection": "Redes",
+    "keywords": "wireshark, redes, análisis de tráfico",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Redes", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/redes.html"},
+      {"@type": "ListItem", "position": 3, "name": "Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/redes.html">Redes</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Wireshark: cómo encuentro un escaneo o un ARP spoof en una c</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-redes">Redes</span>
+      <span class="card-date">8 Enero 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura</h1>
+    <p class="article-subtitle">Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar &#x27;todo&#x27; en una red grande es mala idea.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        8 Enero 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~4 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Intermedio
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#el-error-de-capturar-sin-filtro">El error de capturar sin filtro</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#filtro-de-captura-vs-filtro-de-visualizacion">Filtro de captura vs filtro de visualización</a></li>
+<li><a href="#detectar-un-escaneo-de-puertos">Detectar un escaneo de puertos</a></li>
+<li><a href="#detectar-arp-spoofing">Detectar ARP spoofing</a></li>
+<li><a href="#ver-credenciales-en-texto-claro-para-entender-por-que-importa-https">Ver credenciales en texto claro (para entender por qué importa HTTPS)</a></li>
+<li><a href="#estadisticas-que-reviso-primero-antes-de-filtrar-nada">Estadísticas que reviso primero, antes de filtrar nada</a></li>
+<li><a href="#exportar-para-evidencia">Exportar para evidencia</a></li>
+<li><a href="#como-practico-esto-sin-necesitar-una-red-ajena">Cómo practico esto sin necesitar una red ajena</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="el-error-de-capturar-sin-filtro">El error de capturar sin filtro</h2>
+<p>La primera vez que abrí Wireshark en una red corporativa de prácticas sin
+poner ningún filtro de captura, el archivo pesaba varios GB en menos de
+diez minutos y mi portátil empezó a sufrir solo para desplazarse por la
+lista de paquetes. Desde entonces, antes de darle a "Start capturing" me
+pregunto qué estoy buscando exactamente, y pongo un filtro de captura
+acorde — no analizo "todo el tráfico" si en realidad solo necesito ver qué
+le pasa al puerto 445 de un host concreto.</p>
+<blockquote>
+<p>Capturar tráfico de redes que no son tuyas, sin autorización, puede ser
+ilegal según dónde estés. Esto es para tu propio laboratorio o con
+permiso explícito.</p>
+</blockquote>
+<h2 id="instalacion">Instalación</h2>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install wireshark -y
+sudo usermod -aG wireshark $USER
+</code></pre>
+<p>Ese segundo comando es el que la gente se salta y luego no entiende por qué
+Wireshark le pide permisos de root cada vez que intenta capturar. Tienes que
+cerrar sesión y volver a entrar para que el cambio de grupo surta efecto —
+si sigues viendo el aviso después de añadirte al grupo, normalmente es eso.</p>
+<h2 id="filtro-de-captura-vs-filtro-de-visualizacion">Filtro de captura vs filtro de visualización</h2>
+<p>Esto confunde a casi todo el mundo al principio porque la sintaxis se parece
+pero no es la misma:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cuándo se aplica</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Captura</td>
+<td>Antes de capturar, decide qué se guarda</td>
+<td><code>host 192.168.1.1</code></td>
+</tr>
+<tr>
+<td>Visualización</td>
+<td>Después, filtra lo ya capturado</td>
+<td><code>ip.addr == 192.168.1.1</code></td>
+</tr>
+</tbody>
+</table>
+<p>Si pones la sintaxis de visualización en el campo de captura, Wireshark
+directamente no te deja empezar — el campo se pone en rojo. Si te pasa eso,
+es casi siempre que mezclaste las dos sintaxis.</p>
+<h2 id="detectar-un-escaneo-de-puertos">Detectar un escaneo de puertos</h2>
+<p>El patrón es bastante reconocible: muchos SYN sin ACK, hacia distintos
+puertos del mismo host, en muy poco tiempo.</p>
+<pre><code class="language-text">Filtro de visualización:
+tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0
+</code></pre>
+<p>Lo que de verdad me ayuda a confirmarlo rápido es ir a
+<strong>Statistics → Conversations</strong> y ordenar por número de puertos destino
+distintos para la misma IP origen. Si una sola IP está tocando cien puertos
+distintos en treinta segundos, no es tráfico normal de aplicación, es un
+escaneo.</p>
+<h2 id="detectar-arp-spoofing">Detectar ARP spoofing</h2>
+<p>Esto es la base de la mayoría de ataques MITM en redes locales, y Wireshark
+lo señala solo a veces (lo marca en amarillo si detecta IPs duplicadas), pero
+conviene saber buscarlo a mano también:</p>
+<pre><code class="language-text">Filtro:
+arp
+
+Qué buscar:
+- Varias respuestas &quot;is-at&quot; para la misma IP pero con MAC distinta
+- Aparece de forma repetida, no una vez aislada (eso podría ser solo
+  un cambio de DHCP/reconexión legítima)
+</code></pre>
+<p>La distinción entre "una vez" y "repetido" importa: una sola respuesta ARP
+duplicada puede ser ruido de red normal (alguien reconectó un dispositivo).
+El patrón de ataque es que se repite de forma constante, normalmente cada
+pocos segundos, porque el spoofer necesita mantener el envenenamiento activo.</p>
+<h2 id="ver-credenciales-en-texto-claro-para-entender-por-que-importa-https">Ver credenciales en texto claro (para entender por qué importa HTTPS)</h2>
+<p>Un ejercicio que hago en cualquier sesión de concienciación:</p>
+<pre><code class="language-text">Filtro: http.request.method == &quot;POST&quot;
+Clic derecho sobre el paquete → Follow → HTTP Stream
+</code></pre>
+<p>Esto reconstruye la conversación completa. Verlo una vez con tus propios
+ojos — usuario y contraseña en texto plano, legibles sin ningún esfuerzo —
+convence más que cualquier explicación teórica de por qué HTTP sin TLS es
+un problema.</p>
+<h2 id="estadisticas-que-reviso-primero-antes-de-filtrar-nada">Estadísticas que reviso primero, antes de filtrar nada</h2>
+<p>Cuando recibo una captura de otra persona (un cliente, un compañero) y no sé
+qué estoy buscando, empiezo siempre por:</p>
+<ul>
+<li><strong>Protocol Hierarchy</strong> — qué porcentaje es de cada protocolo, te da una
+  idea rápida de si hay algo raro (por ejemplo, un volumen de DNS
+  desproporcionado puede indicar exfiltración por DNS tunneling)</li>
+<li><strong>Conversations</strong> — qué hosts hablan más entre sí</li>
+<li><strong>IO Graph</strong> — si hay un pico de tráfico muy localizado en el tiempo, eso
+  es lo primero que voy a investigar</li>
+</ul>
+<h2 id="exportar-para-evidencia">Exportar para evidencia</h2>
+<pre><code class="language-text">File → Export Specified Packets → marca &quot;Displayed&quot; si quieres
+exportar solo lo que tienes filtrado, no la captura entera
+</code></pre>
+<p>Guarda siempre en <code>.pcapng</code>, no en el formato antiguo <code>.pcap</code> — mantiene
+metadata que el formato viejo descarta y que a veces necesitas después.</p>
+<h2 id="como-practico-esto-sin-necesitar-una-red-ajena">Cómo practico esto sin necesitar una red ajena</h2>
+<p>Monto dos máquinas virtuales en la misma red interna y provoco yo mismo los
+escenarios: un escaneo con Nmap desde una hacia la otra, un ARP spoof con
+<code>bettercap</code>, una petición HTTP simple a un servidor de pruebas. Verlo
+generado por ti mismo en Wireshark, sabiendo exactamente qué provocó cada
+paquete, es la forma más rápida de aprender a reconocerlo cuando aparece en
+una captura real que no has generado tú.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">wireshark</a>
+<a href="#" class="tag">redes</a>
+<a href="#" class="tag">análisis de tráfico</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#el-error-de-capturar-sin-filtro">El error de capturar sin filtro</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#filtro-de-captura-vs-filtro-de-visualizacion">Filtro de captura vs filtro de visualización</a></li>
+<li><a href="#detectar-un-escaneo-de-puertos">Detectar un escaneo de puertos</a></li>
+<li><a href="#detectar-arp-spoofing">Detectar ARP spoofing</a></li>
+<li><a href="#ver-credenciales-en-texto-claro-para-entender-por-que-importa-https">Ver credenciales en texto claro (para entender por qué importa HTTPS)</a></li>
+<li><a href="#estadisticas-que-reviso-primero-antes-de-filtrar-nada">Estadísticas que reviso primero, antes de filtrar nada</a></li>
+<li><a href="#exportar-para-evidencia">Exportar para evidencia</a></li>
+<li><a href="#como-practico-esto-sin-necesitar-una-red-ajena">Cómo practico esto sin necesitar una red ajena</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html&text=Wireshark:%20cómo%20encuentro%20un%20escaneo%20o%20un%20ARP%20spoof%20en%20una%20captura" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "wireshark-analisis-trafico";
+    const category = "redes";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

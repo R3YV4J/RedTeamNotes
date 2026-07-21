@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>theHarvester: el primer comando que lanzo en cualquier reconocimiento · RedTeamNotes</title>
+  <meta name="description" content="Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.">
+  <meta name="keywords" content="theHarvester, OSINT, reconocimiento">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html">
+  <meta property="og:title" content="theHarvester: el primer comando que lanzo en cualquier reconocimiento · RedTeamNotes">
+  <meta property="og:description" content="Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-theharvester-reconocimiento-osint.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-02-05">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="OSINT">
+  <meta property="article:tag" content="theHarvester, OSINT, reconocimiento">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="theHarvester: el primer comando que lanzo en cualquier reconocimiento">
+  <meta name="twitter:description" content="Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-theharvester-reconocimiento-osint.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "theHarvester: el primer comando que lanzo en cualquier reconocimiento",
+    "description": "Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-theharvester-reconocimiento-osint.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-02-05",
+    "dateModified": "2026-02-05",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html"},
+    "articleSection": "OSINT",
+    "keywords": "theHarvester, OSINT, reconocimiento",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "OSINT", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/osint.html"},
+      {"@type": "ListItem", "position": 3, "name": "theHarvester: el primer comando que lanzo en cualquier reconocimiento", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/osint.html">OSINT</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">theHarvester: el primer comando que lanzo en cualquier recon</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-osint">OSINT</span>
+      <span class="card-date">5 Febrero 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">theHarvester: el primer comando que lanzo en cualquier reconocimiento</h1>
+    <p class="article-subtitle">Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        5 Febrero 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~3 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Principiante
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-esto-antes-que-maltego">Por qué esto antes que Maltego</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#el-comando-basico">El comando básico</a></li>
+<li><a href="#las-fuentes-que-de-verdad-dan-resultado">Las fuentes que de verdad dan resultado</a></li>
+<li><a href="#caso-real-de-subdominios-a-superficie-de-ataque">Caso real: de subdominios a superficie de ataque</a></li>
+<li><a href="#exportar-resultados">Exportar resultados</a></li>
+<li><a href="#la-limitacion-que-hay-que-tener-clara">La limitación que hay que tener clara</a></li>
+<li><a href="#conclusion-practica">Conclusión práctica</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-esto-antes-que-maltego">Por qué esto antes que Maltego</h2>
+<p>theHarvester no tiene la interfaz gráfica vistosa de Maltego, pero por eso
+mismo es lo primero que lanzo en cualquier reconocimiento: un solo comando,
+sin montar nada, y en menos de un minuto tengo una vista general de qué hay
+público sobre un dominio. Si lo que sale ahí justifica profundizar, paso a
+herramientas más pesadas. Si no, ya he ahorrado el tiempo de montar un
+grafo para nada.</p>
+<blockquote>
+<p>El uso de OSINT debe respetar la normativa de protección de datos
+aplicable. Esto es para reconocimiento autorizado, no para otra cosa.</p>
+</blockquote>
+<h2 id="instalacion">Instalación</h2>
+<p>En Kali viene preinstalado. Si no:</p>
+<pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt install theharvester -y
+</code></pre>
+<p>Si lo instalas desde el repositorio de GitHub directamente (recomendable si
+quieres la versión más reciente, porque algunas fuentes cambian su API con
+frecuencia y el paquete de apt se queda atrás):</p>
+<pre><code class="language-bash">git clone https://github.com/laramies/theHarvester.git
+cd theHarvester
+pip install -r requirements/base.txt
+</code></pre>
+<h2 id="el-comando-basico">El comando básico</h2>
+<pre><code class="language-bash">theHarvester -d empresa.com -b all
+</code></pre>
+<p><code>-b all</code> lanza la búsqueda contra todas las fuentes disponibles. La primera
+vez que lo usé así, esperaba que tardara segundos y tardó varios minutos —
+algunas fuentes (sobre todo las que dependen de APIs externas con rate
+limiting) son notablemente más lentas que otras. Para resultados rápidos,
+prefiero apuntar a fuentes específicas:</p>
+<pre><code class="language-bash">theHarvester -d empresa.com -b duckduckgo,crtsh,hackertarget
+</code></pre>
+<h2 id="las-fuentes-que-de-verdad-dan-resultado">Las fuentes que de verdad dan resultado</h2>
+<p>No todas las fuentes (<code>-b</code>) dan el mismo nivel de señal. Las que más uso:</p>
+<table>
+<thead>
+<tr>
+<th>Fuente</th>
+<th>Qué aporta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>crtsh</code></td>
+<td>Subdominios desde certificados SSL públicos — muy fiable, sin rate limit agresivo</td>
+</tr>
+<tr>
+<td><code>hackertarget</code></td>
+<td>Subdominios y reconocimiento básico de DNS</td>
+</tr>
+<tr>
+<td><code>duckduckgo</code></td>
+<td>Emails y nombres indexados, sin necesitar API key</td>
+</tr>
+<tr>
+<td><code>bing</code></td>
+<td>Similar a duckduckgo, complementa resultados</td>
+</tr>
+</tbody>
+</table>
+<p>Las fuentes que requieren API key (Shodan, Hunter.io, etc.) dan mejores
+resultados pero necesitas configurar la clave en
+<code>theHarvester/api-keys.yaml</code> antes. Sin esa clave, simplemente se omiten en
+silencio — si esperas resultados de una fuente y no aparece nada, comprueba
+si necesitaba API key configurada.</p>
+<h2 id="caso-real-de-subdominios-a-superficie-de-ataque">Caso real: de subdominios a superficie de ataque</h2>
+<p>Un flujo que repito bastante:</p>
+<pre><code class="language-bash"># 1. Subdominios vía certificados (rápido y fiable)
+theHarvester -d empresa.com -b crtsh
+
+# 2. Verificar cuáles responden de verdad (theHarvester lista,
+#    pero no siempre confirma que el host esté vivo)
+cat subdominios.txt | httpx -silent
+
+# 3. De los que responden, capturar tecnología/headers
+httpx -silent -title -tech-detect -l vivos.txt
+</code></pre>
+<p>theHarvester por sí solo te da la lista. El paso de verificar con <code>httpx</code>
+es el que de verdad te dice qué de esa lista importa — muchos subdominios
+que aparecen en certificados llevan años sin servicio activo detrás.</p>
+<h2 id="exportar-resultados">Exportar resultados</h2>
+<pre><code class="language-bash">theHarvester -d empresa.com -b all -f resultado
+# Genera resultado.json y resultado.html
+</code></pre>
+<p>El HTML es útil para una revisión visual rápida; para procesar los datos
+con otro script, el JSON es el formato que realmente uso.</p>
+<h2 id="la-limitacion-que-hay-que-tener-clara">La limitación que hay que tener clara</h2>
+<p>theHarvester agrega lo que las fuentes externas ya indexan — no descubre
+nada por fuerza bruta ni hace nada activo contra el objetivo. Si una fuente
+no tiene indexado un subdominio (porque es nuevo, porque no tiene
+certificado público, etc.), theHarvester no lo va a encontrar. Para eso
+hace falta combinar con herramientas de fuerza bruta de subdominios como
+<code>gobuster dns</code> o <code>ffuf</code> en modo DNS, que sí prueban activamente contra
+wordlists.</p>
+<h2 id="conclusion-practica">Conclusión práctica</h2>
+<p>theHarvester es el primer paso, no el único. Le doy uso real combinándolo
+con <code>httpx</code> para validar lo que encuentra, y reservo Maltego (o herramientas
+similares) para cuando necesito visualizar relaciones entre múltiples tipos
+de entidad, no solo listar subdominios y emails.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">theHarvester</a>
+<a href="#" class="tag">OSINT</a>
+<a href="#" class="tag">reconocimiento</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-esto-antes-que-maltego">Por qué esto antes que Maltego</a></li>
+<li><a href="#instalacion">Instalación</a></li>
+<li><a href="#el-comando-basico">El comando básico</a></li>
+<li><a href="#las-fuentes-que-de-verdad-dan-resultado">Las fuentes que de verdad dan resultado</a></li>
+<li><a href="#caso-real-de-subdominios-a-superficie-de-ataque">Caso real: de subdominios a superficie de ataque</a></li>
+<li><a href="#exportar-resultados">Exportar resultados</a></li>
+<li><a href="#la-limitacion-que-hay-que-tener-clara">La limitación que hay que tener clara</a></li>
+<li><a href="#conclusion-practica">Conclusión práctica</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html&text=theHarvester:%20el%20primer%20comando%20que%20lanzo%20en%20cualquier%20reconocimiento" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/theharvester-reconocimiento-osint.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "theharvester-reconocimiento-osint";
+    const category = "osint";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

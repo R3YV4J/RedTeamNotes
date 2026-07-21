@@ -1,0 +1,24 @@
+{
+  "site_name": "RedTeamNotes",
+  "site_tagline": "Notas de pentesting, OSINT y seguridad ofensiva",
+  "site_description": "Notas técnicas sobre pentesting, OSINT, Linux y Python. Sin relleno, con comandos reales y los errores que me he encontrado por el camino.",
+  "domain": "https://r3yv4j.github.io",
+  "base_path": "/RedTeamNotes",
+  "author": {
+    "name": "R3yv4j",
+    "bio": "Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.",
+    "avatar": "R3",
+    "github": "https://github.com/r3yv4j",
+    "linkedin": "https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/",
+    "portfolio": "https://r3yv4j.github.io/",
+    "email": "r3yv4j@gmail.com"
+  },
+  "social": {
+    "github": "https://github.com/r3yv4j",
+    "linkedin": "https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/"
+  },
+  "legal": {
+    "entity_name": "R3yv4j",
+    "jurisdiction": "España"
+  }
+}
