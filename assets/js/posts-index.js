@@ -219,8 +219,8 @@ window.POSTS_INDEX = [
     "title": "Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo",
     "slug": "osint-maltego-tutorial",
     "url": "/RedTeamNotes/posts/osint-maltego-tutorial.html",
-    "hasCover": false,
-    "coverExt": "png",
+    "hasCover": true,
+    "coverExt": "jpeg",
     "category": "OSINT",
     "categorySlug": "osint",
     "tags": [
@@ -238,8 +238,8 @@ window.POSTS_INDEX = [
     "title": "theHarvester: el primer comando que lanzo en cualquier reconocimiento",
     "slug": "theharvester-reconocimiento-osint",
     "url": "/RedTeamNotes/posts/theharvester-reconocimiento-osint.html",
-    "hasCover": false,
-    "coverExt": "png",
+    "hasCover": true,
+    "coverExt": "jpeg",
     "category": "OSINT",
     "categorySlug": "osint",
     "tags": [
@@ -257,8 +257,8 @@ window.POSTS_INDEX = [
     "title": "Nmap en condiciones: lo que uso de verdad en un pentest",
     "slug": "guia-nmap-completa",
     "url": "/RedTeamNotes/posts/guia-nmap-completa.html",
-    "hasCover": false,
-    "coverExt": "png",
+    "hasCover": true,
+    "coverExt": "jpeg",
     "category": "Pentesting",
     "categorySlug": "pentesting",
     "tags": [
@@ -279,8 +279,8 @@ window.POSTS_INDEX = [
     "title": "Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura",
     "slug": "wireshark-analisis-trafico",
     "url": "/RedTeamNotes/posts/wireshark-analisis-trafico.html",
-    "hasCover": false,
-    "coverExt": "png",
+    "hasCover": true,
+    "coverExt": "jpeg",
     "category": "Redes",
     "categorySlug": "redes",
     "tags": [
