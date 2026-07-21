@@ -21,25 +21,6 @@ window.POSTS_INDEX = [
     "excerpt": "Notas sobre la preparación de la eWPT de eLearnSecurity: qué diferencia hay con la eJPTv2, qué partes del temario son más densas y cómo estoy practicando."
   },
   {
-    "title": "CompTIA Security+: ¿merece la pena antes del OSCP?",
-    "slug": "comptia-security-plus-vs-oscp",
-    "url": "/RedTeamNotes/posts/comptia-security-plus-vs-oscp.html",
-    "hasCover": false,
-    "coverExt": "png",
-    "category": "Certificaciones",
-    "categorySlug": "certificaciones",
-    "tags": [
-      "Security+",
-      "CompTIA",
-      "certificaciones"
-    ],
-    "date": "2026-06-11",
-    "dateHuman": "11 Junio 2026",
-    "readTime": "3 min",
-    "author": "R3yv4j",
-    "excerpt": "Por qué hice el Security+ antes de lanzarme al OSCP, qué cubre realmente, y en qué se diferencia de una certificación práctica de pentesting."
-  },
-  {
     "title": "eJPTv2: lo que aprendes de verdad preparándola y lo que no esperaba del examen",
     "slug": "ejptv2-preparacion-experiencia",
     "url": "/RedTeamNotes/posts/ejptv2-preparacion-experiencia.html",
