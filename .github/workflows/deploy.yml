@@ -1,0 +1,61 @@
+name: Build y Deploy a GitHub Pages
+
+# Se ejecuta automáticamente en cada push a main,
+# o manualmente desde la pestaña "Actions" de GitHub.
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependencias Python
+        run: pip install markdown pyyaml
+
+      - name: Instalar wkhtmltoimage (para imágenes Open Graph)
+        run: sudo apt-get update && sudo apt-get install -y wkhtmltopdf imagemagick
+
+      - name: Generar artículos desde Markdown (build.py)
+        run: python3 scripts/build.py
+
+      - name: Generar imágenes Open Graph para artículos nuevos
+        run: python3 scripts/generate_og_images.py
+
+      - name: Commit de archivos generados (si hay cambios)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts/ assets/js/posts-index.js assets/images/og-*.png sitemap.xml feed.xml index.html 404.html categories/ pages/
+          git diff --staged --quiet || git commit -m "🤖 Auto-build: artículos e imágenes OG actualizados [skip ci]"
+          git push || echo "Nada que subir"
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Subir artefacto del sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
