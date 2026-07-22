@@ -18,7 +18,6 @@
 </head>
 <body>
 
-<!-- ============ TOPBAR ============ -->
 <div class="topbar">
   <div class="container topbar-inner">
     <span>RTN(7) — Manual de {{SITE_NAME}}</span>
@@ -65,7 +64,6 @@
     <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true"></div>
 
     <div class="grid-3" id="category-articles-herramientas">
-      <!-- Los artículos de esta categoría se inyectan dinámicamente vía JS desde POSTS_INDEX -->
       <p class="text-muted font-mono" style="grid-column:1/-1;text-align:center;padding:3rem 0" id="empty-herramientas">
         Cargando artículos de Herramientas...
       </p>
@@ -87,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
   empty.remove();
   grid.innerHTML = posts.map(p => `
     <article class="card">
-      <div class="card-image">
-        <div class="card-image-placeholder">08</div>
+      <div class="card-image" id="img-cover-${p.slug}">
+        <div class="card-image-placeholder" data-lines="${p.categorySlug}" aria-hidden="true"></div>
         <span class="card-category cat-${p.categorySlug}">${p.category}</span>
       </div>
       <div class="card-body">
@@ -101,7 +99,33 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </article>
   `).join('');
+
+  loadCoverImages(posts);
 });
+
+function loadCoverImages(posts) {
+  const base = `{{BASE_PATH}}/assets/images`;
+  posts.forEach(p => {
+    const container = document.getElementById(`img-cover-${p.slug}`);
+    if (!container) return;
+    const exts = ['jpeg', 'jpg', 'png'];
+    let tried = 0;
+    function tryNext() {
+      if (tried >= exts.length) return;
+      const ext = exts[tried++];
+      const img = new Image();
+      img.onload = () => {
+        container.style.backgroundImage = `url('${base}/cover-${p.slug}.${ext}')`;
+        container.classList.add('has-cover');
+        const ph = container.querySelector('.card-image-placeholder');
+        if (ph) ph.style.display = 'none';
+      };
+      img.onerror = tryNext;
+      img.src = `${base}/cover-${p.slug}.${ext}`;
+    }
+    tryNext();
+  });
+}
 </script>
 
 </main>
