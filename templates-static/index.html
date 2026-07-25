@@ -337,11 +337,9 @@
     const posts = (window.POSTS_INDEX || []).slice().sort((a, b) => b.date.localeCompare(a.date));
 
     function cardHTML(p, featured = false) {
-      // Siempre genera la card con placeholder.
-      // loadCoverImages() intentará cargar la imagen real después.
       return `
         <article class="card ${featured ? 'card-featured' : ''}" itemscope itemtype="https://schema.org/BlogPosting">
-          <div class="card-image" id="img-cover-${p.slug}">
+          <div class="card-image" data-cover-slug="${p.slug}">
             <div class="card-image-placeholder" data-lines="${p.categorySlug}" aria-hidden="true"></div>
             <span class="card-category cat-${p.categorySlug}">${p.category}</span>
           </div>
@@ -358,11 +356,12 @@
 
     function loadCoverImages(posts) {
       // Para cada artículo, prueba jpeg → jpg → png en ese orden.
-      // Si encuentra una, la aplica como fondo. Si no, queda el placeholder.
+      // Actualiza TODAS las tarjetas con ese slug (puede haber más de
+      // una en la misma página: "Últimas notas" + "Todas las notas").
       const base = `{{BASE_PATH}}/assets/images`;
       posts.forEach(p => {
-        const container = document.getElementById(`img-cover-${p.slug}`);
-        if (!container) return;
+        const containers = document.querySelectorAll(`[data-cover-slug="${p.slug}"]`);
+        if (!containers.length) return;
         const exts = ['jpeg', 'jpg', 'png'];
         let tried = 0;
         function tryNext() {
@@ -370,10 +369,12 @@
           const ext = exts[tried++];
           const img = new Image();
           img.onload = () => {
-            container.style.backgroundImage = `url('${base}/cover-${p.slug}.${ext}')`;
-            container.classList.add('has-cover');
-            const ph = container.querySelector('.card-image-placeholder');
-            if (ph) ph.style.display = 'none';
+            containers.forEach(container => {
+              container.style.backgroundImage = `url('${base}/cover-${p.slug}.${ext}')`;
+              container.classList.add('has-cover');
+              const ph = container.querySelector('.card-image-placeholder');
+              if (ph) ph.style.display = 'none';
+            });
           };
           img.onerror = tryNext;
           img.src = `${base}/cover-${p.slug}.${ext}`;
