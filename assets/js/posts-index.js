@@ -14,8 +14,8 @@ window.POSTS_INDEX = [
       "análisis de tráfico",
       "redes"
     ],
-    "date": "2026-12-02",
-    "dateHuman": "2 Diciembre 2026",
+    "date": "2026-07-02",
+    "dateHuman": "2 Julio 2026",
     "readTime": "2 min",
     "author": "R3yv4j",
     "excerpt": "Por qué sigo usando tcpdump en línea de comandos cuando ya tengo Wireshark instalado, y los filtros de captura que más repito para no tener que abrir la interfaz gráfica."
