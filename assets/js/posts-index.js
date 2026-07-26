@@ -4,8 +4,8 @@ window.POSTS_INDEX = [
     "title": "tcpdump vs Wireshark: cuándo uso cada uno",
     "slug": "tcpdump-vs-wireshark",
     "url": "/RedTeamNotes/posts/tcpdump-vs-wireshark.html",
-    "hasCover": false,
-    "coverExt": "png",
+    "hasCover": true,
+    "coverExt": "jpeg",
     "category": "Redes",
     "categorySlug": "redes",
     "tags": [
