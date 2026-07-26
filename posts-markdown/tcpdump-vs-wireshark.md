@@ -4,7 +4,7 @@ description: "Por qué sigo usando tcpdump en línea de comandos cuando ya tengo
 slug: "tcpdump-vs-wireshark"
 category: "Redes"
 tags: ["tcpdump", "wireshark", "análisis de tráfico", "redes"]
-date: "2026-12-02"
+date: "2026-07-02"
 level: "Intermedio"
 ---
 
