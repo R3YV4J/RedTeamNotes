@@ -1,6 +1,26 @@
 // Auto-generado por scripts/build.py — NO EDITAR A MANO
 window.POSTS_INDEX = [
   {
+    "title": "tcpdump vs Wireshark: cuándo uso cada uno",
+    "slug": "tcpdump-vs-wireshark",
+    "url": "/RedTeamNotes/posts/tcpdump-vs-wireshark.html",
+    "hasCover": false,
+    "coverExt": "png",
+    "category": "Redes",
+    "categorySlug": "redes",
+    "tags": [
+      "tcpdump",
+      "wireshark",
+      "análisis de tráfico",
+      "redes"
+    ],
+    "date": "2026-12-02",
+    "dateHuman": "2 Diciembre 2026",
+    "readTime": "2 min",
+    "author": "R3yv4j",
+    "excerpt": "Por qué sigo usando tcpdump en línea de comandos cuando ya tengo Wireshark instalado, y los filtros de captura que más repito para no tener que abrir la interfaz gráfica."
+  },
+  {
     "title": "Preparando la eWPT: lo que cubre y cómo lo estoy enfocando",
     "slug": "ewpt-preparacion",
     "url": "/RedTeamNotes/posts/ewpt-preparacion.html",
