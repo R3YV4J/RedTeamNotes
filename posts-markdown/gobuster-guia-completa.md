@@ -4,7 +4,7 @@ description: "Modo dir, dns y vhost de gobuster explicados con ejemplos reales, 
 slug: "gobuster-guia-completa"
 category: "Herramientas"
 tags: ["gobuster", "fuzzing", "pentesting web", "reconocimiento"]
-date: "2026-12-09"
+date: "2026-07-09"
 level: "Principiante"
 ---
 
