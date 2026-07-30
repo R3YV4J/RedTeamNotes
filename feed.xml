@@ -10,7 +10,7 @@
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
-      <pubDate>Wed, 09 Dec 2026 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 +0000</pubDate>
       <description>Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente.</description>
       <category>Herramientas</category>
     </item>

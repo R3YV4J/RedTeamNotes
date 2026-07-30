@@ -14,8 +14,8 @@ window.POSTS_INDEX = [
       "pentesting web",
       "reconocimiento"
     ],
-    "date": "2026-12-09",
-    "dateHuman": "9 Diciembre 2026",
+    "date": "2026-07-09",
+    "dateHuman": "9 Julio 2026",
     "readTime": "2 min",
     "author": "R3yv4j",
     "excerpt": "Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente."
