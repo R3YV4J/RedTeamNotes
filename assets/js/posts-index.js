@@ -1,6 +1,26 @@
 // Auto-generado por scripts/build.py — NO EDITAR A MANO
 window.POSTS_INDEX = [
   {
+    "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
+    "slug": "gobuster-guia-completa",
+    "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Herramientas",
+    "categorySlug": "herramientas",
+    "tags": [
+      "gobuster",
+      "fuzzing",
+      "pentesting web",
+      "reconocimiento"
+    ],
+    "date": "2026-12-09",
+    "dateHuman": "9 Diciembre 2026",
+    "readTime": "2 min",
+    "author": "R3yv4j",
+    "excerpt": "Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente."
+  },
+  {
     "title": "tcpdump vs Wireshark: cuándo uso cada uno",
     "slug": "tcpdump-vs-wireshark",
     "url": "/RedTeamNotes/posts/tcpdump-vs-wireshark.html",

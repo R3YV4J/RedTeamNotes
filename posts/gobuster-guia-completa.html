@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios · RedTeamNotes</title>
+  <meta name="description" content="Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente.">
+  <meta name="keywords" content="gobuster, fuzzing, pentesting web, reconocimiento">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html">
+  <meta property="og:title" content="Gobuster: los tres modos que uso más allá del descubrimiento de directorios · RedTeamNotes">
+  <meta property="og:description" content="Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-gobuster-guia-completa.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-12-09">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Herramientas">
+  <meta property="article:tag" content="gobuster, fuzzing, pentesting web, reconocimiento">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gobuster: los tres modos que uso más allá del descubrimiento de directorios">
+  <meta name="twitter:description" content="Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-gobuster-guia-completa.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
+    "description": "Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-gobuster-guia-completa.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-12-09",
+    "dateModified": "2026-12-09",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html"},
+    "articleSection": "Herramientas",
+    "keywords": "gobuster, fuzzing, pentesting web, reconocimiento",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Herramientas", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/herramientas.html"},
+      {"@type": "ListItem", "position": 3, "name": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/herramientas.html">Herramientas</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Gobuster: los tres modos que uso más allá del descubrimiento</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-herramientas">Herramientas</span>
+      <span class="card-date">9 Diciembre 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Gobuster: los tres modos que uso más allá del descubrimiento de directorios</h1>
+    <p class="article-subtitle">Modo dir, dns y vhost de gobuster explicados con ejemplos reales, y por qué cada uno resuelve un problema distinto que ffuf también cubre pero con sintaxis diferente.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        9 Diciembre 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~2 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Principiante
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-tengo-tanto-gobuster-como-ffuf">Por qué tengo tanto gobuster como ffuf</a></li>
+<li><a href="#modo-dir-descubrimiento-de-directorios">Modo dir: descubrimiento de directorios</a></li>
+<li><a href="#modo-dns-fuerza-bruta-de-subdominios">Modo dns: fuerza bruta de subdominios</a></li>
+<li><a href="#modo-vhost-virtual-hosts">Modo vhost: virtual hosts</a></li>
+<li><a href="#diferencia-real-de-rendimiento-con-ffuf">Diferencia real de rendimiento con ffuf</a></li>
+<li><a href="#cuando-prefiero-gobuster-sobre-ffuf">Cuándo prefiero gobuster sobre ffuf</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-tengo-tanto-gobuster-como-ffuf">Por qué tengo tanto gobuster como ffuf</h2>
+<p>Ya escribí sobre ffuf, que es más flexible en muchos aspectos. Pero gobuster sigue teniendo su sitio: su sintaxis específica por modo (<code>dir</code>, <code>dns</code>, <code>vhost</code>) hace que ciertas tareas sean más rápidas de escribir sin tener que montar los flags genéricos de ffuf desde cero cada vez. No es que uno sea mejor que el otro en abstracto — cada uno tiene su momento.</p>
+<h2 id="modo-dir-descubrimiento-de-directorios">Modo dir: descubrimiento de directorios</h2>
+<pre><code class="language-bash">gobuster dir -u http://objetivo.com -w /usr/share/seclists/Discovery/Web-Content/common.txt
+</code></pre>
+<p>La diferencia práctica con ffuf en este modo es mínima — ambos hacen esencialmente lo mismo. La ventaja de gobuster aquí es la sintaxis más corta y directa cuando no necesitas el nivel de personalización de filtrado que ffuf permite.</p>
+<pre><code class="language-bash"># Con extensiones y filtrando por código de estado
+gobuster dir -u http://objetivo.com -w common.txt -x php,bak,txt -b 404,403
+</code></pre>
+<p><code>-b</code> excluye (blacklist) los códigos de estado indicados, en vez de tener que especificar qué incluir.</p>
+<h2 id="modo-dns-fuerza-bruta-de-subdominios">Modo dns: fuerza bruta de subdominios</h2>
+<p>Este es el que uso con más frecuencia respecto a ffuf, porque gobuster tiene el modo DNS integrado de forma nativa, sin tener que simular la petición con cabeceras manuales:</p>
+<pre><code class="language-bash">gobuster dns -d objetivo.com -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+</code></pre>
+<p>Con resolución de IPs incluida directamente en la salida, útil para ver de un vistazo qué subdominios responden y a qué apuntan:</p>
+<pre><code class="language-bash">gobuster dns -d objetivo.com -w subdomains.txt -i
+</code></pre>
+<p><code>-i</code> muestra las IPs resueltas junto a cada subdominio encontrado, ahorrando el paso extra de resolver cada uno por separado después.</p>
+<h2 id="modo-vhost-virtual-hosts">Modo vhost: virtual hosts</h2>
+<p>El equivalente al fuzzing de vhost que hice con ffuf usando la cabecera Host manual, pero con sintaxis dedicada:</p>
+<pre><code class="language-bash">gobuster vhost -u http://objetivo.com -w subdomains.txt --append-domain
+</code></pre>
+<p><code>--append-domain</code> añade automáticamente el dominio base a cada palabra de la wordlist, evitando tener que preparar la wordlist con el dominio completo ya incluido en cada línea.</p>
+<h2 id="diferencia-real-de-rendimiento-con-ffuf">Diferencia real de rendimiento con ffuf</h2>
+<p>En la práctica, para volúmenes grandes de wordlist, ffuf suele ser algo más rápido por cómo maneja la concurrencia, pero la diferencia no es dramática en la mayoría de casos de uso normales. La elección entre uno u otro para mí depende más de qué sintaxis tengo más fresca en la cabeza en el momento, o si necesito el filtrado más fino que ffuf permite con <code>-fs</code>/<code>-fw</code>/<code>-fl</code> combinados.</p>
+<h2 id="cuando-prefiero-gobuster-sobre-ffuf">Cuándo prefiero gobuster sobre ffuf</h2>
+<p>Cuando el objetivo es simple y directo — un descubrimiento de directorios estándar sin necesidad de filtrado complejo, o una fuerza bruta de subdominios donde quiero la resolución de IP integrada sin pasos extra. Para cualquier caso donde necesito filtrar resultados por tamaño de respuesta de forma precisa (aplicaciones con páginas "no encontrado" personalizadas que devuelven 200), ffuf me da más control directo.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">gobuster</a>
+<a href="#" class="tag">fuzzing</a>
+<a href="#" class="tag">pentesting web</a>
+<a href="#" class="tag">reconocimiento</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-tengo-tanto-gobuster-como-ffuf">Por qué tengo tanto gobuster como ffuf</a></li>
+<li><a href="#modo-dir-descubrimiento-de-directorios">Modo dir: descubrimiento de directorios</a></li>
+<li><a href="#modo-dns-fuerza-bruta-de-subdominios">Modo dns: fuerza bruta de subdominios</a></li>
+<li><a href="#modo-vhost-virtual-hosts">Modo vhost: virtual hosts</a></li>
+<li><a href="#diferencia-real-de-rendimiento-con-ffuf">Diferencia real de rendimiento con ffuf</a></li>
+<li><a href="#cuando-prefiero-gobuster-sobre-ffuf">Cuándo prefiero gobuster sobre ffuf</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html&text=Gobuster:%20los%20tres%20modos%20que%20uso%20más%20allá%20del%20descubrimiento%20de%20directorios" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "gobuster-guia-completa";
+    const category = "herramientas";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>
