@@ -7,6 +7,14 @@
     <language>es</language>
     <atom:link href="https://r3yv4j.github.io/RedTeamNotes/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html</guid>
+      <pubDate>Wed, 17 Feb 2027 00:00:00 +0000</pubDate>
+      <description>Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host.</description>
+      <category>Linux</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>

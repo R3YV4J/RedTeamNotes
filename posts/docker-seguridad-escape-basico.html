@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor · RedTeamNotes</title>
+  <meta name="description" content="Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host.">
+  <meta name="keywords" content="docker, contenedores, escape de contenedor, post-explotación">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html">
+  <meta property="og:title" content="Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor · RedTeamNotes">
+  <meta property="og:description" content="Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-docker-seguridad-escape-basico.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2027-02-17">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Linux">
+  <meta property="article:tag" content="docker, contenedores, escape de contenedor, post-explotación">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor">
+  <meta name="twitter:description" content="Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-docker-seguridad-escape-basico.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor",
+    "description": "Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-docker-seguridad-escape-basico.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2027-02-17",
+    "dateModified": "2027-02-17",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html"},
+    "articleSection": "Linux",
+    "keywords": "docker, contenedores, escape de contenedor, post-explotación",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Linux", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/linux.html"},
+      {"@type": "ListItem", "position": 3, "name": "Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/linux.html">Linux</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Docker: lo básico de seguridad que reviso antes de dar por s</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-linux">Linux</span>
+      <span class="card-date">17 Febrero 2027</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor</h1>
+    <p class="article-subtitle">Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        17 Febrero 2027
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~3 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Avanzado
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-esta-en-un-contenedor-no-significa-esta-aislado">Por qué &quot;está en un contenedor&quot; no significa &quot;está aislado&quot;</a></li>
+<li><a href="#lo-primero-que-reviso-al-tener-acceso-a-un-contenedor">Lo primero que reviso al tener acceso a un contenedor</a></li>
+<li><a href="#el-caso-mas-directo-el-socket-de-docker-montado-dentro">El caso más directo: el socket de Docker montado dentro</a></li>
+<li><a href="#contenedores-en-modo-privileged">Contenedores en modo privileged</a></li>
+<li><a href="#capabilities-especificas-peligrosas-dentro-de-contenedores">Capabilities específicas peligrosas dentro de contenedores</a></li>
+<li><a href="#variables-de-entorno-con-credenciales">Variables de entorno con credenciales</a></li>
+<li><a href="#lo-que-reviso-siempre-en-orden">Lo que reviso siempre, en orden</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-esta-en-un-contenedor-no-significa-esta-aislado">Por qué "está en un contenedor" no significa "está aislado"</h2>
+<p>Al principio asumía que tener acceso dentro de un contenedor era, por definición, un compromiso limitado — al fin y al cabo, un contenedor no es la máquina host completa. La realidad es que hay configuraciones bastante comunes que rompen ese aislamiento por completo, y no requieren ningún exploit de kernel sofisticado, solo saber qué buscar dentro del contenedor.</p>
+<blockquote>
+<p>Para entornos de laboratorio propios o pentests con autorización.</p>
+</blockquote>
+<h2 id="lo-primero-que-reviso-al-tener-acceso-a-un-contenedor">Lo primero que reviso al tener acceso a un contenedor</h2>
+<pre><code class="language-bash">cat /proc/1/cgroup
+ls -la /.dockerenv
+</code></pre>
+<p>Confirma que efectivamente estás dentro de un contenedor y no en el host directamente — el primer paso antes de plantear cualquier vía de escape.</p>
+<h2 id="el-caso-mas-directo-el-socket-de-docker-montado-dentro">El caso más directo: el socket de Docker montado dentro</h2>
+<p>Esta es la configuración que, cuando aparece, da control total sobre el host casi sin esfuerzo:</p>
+<pre><code class="language-bash">ls -la /var/run/docker.sock
+</code></pre>
+<p>Si ese socket existe dentro del contenedor (montado explícitamente, algo que a veces se hace por comodidad para herramientas de CI/CD dentro de contenedores, sin pensar en la implicación de seguridad), puedes usarlo para hablar directamente con el daemon de Docker del host <strong>desde dentro del contenedor</strong>:</p>
+<pre><code class="language-bash">docker -H unix:///var/run/docker.sock ps
+</code></pre>
+<p>Y si puedes listar contenedores, puedes crear uno nuevo montando el sistema de archivos raíz del host:</p>
+<pre><code class="language-bash">docker -H unix:///var/run/docker.sock run -v /:/host -it alpine chroot /host
+</code></pre>
+<p>Esto te da una shell con acceso completo al sistema de archivos del host, efectivamente escapando del contenedor original — no porque haya un fallo de Docker, sino porque el socket montado te da la misma autoridad que tendría cualquier proceso legítimo del host que hable con el daemon.</p>
+<h2 id="contenedores-en-modo-privileged">Contenedores en modo privileged</h2>
+<pre><code class="language-bash">cat /proc/self/status | grep CapEff
+</code></pre>
+<p>Si el contenedor se lanzó con <code>--privileged</code>, tiene prácticamente todas las capabilities del kernel disponibles, casi anulando el aislamiento que Docker normalmente proporciona. Con eso, montar dispositivos del host directamente suele ser posible:</p>
+<pre><code class="language-bash">fdisk -l
+mkdir /mnt/host
+mount /dev/sda1 /mnt/host
+</code></pre>
+<p>Si el disco del host es accesible y montable desde dentro del contenedor privilegiado, tienes acceso de lectura/escritura al sistema de archivos completo del host sin necesitar el socket de Docker en absoluto.</p>
+<h2 id="capabilities-especificas-peligrosas-dentro-de-contenedores">Capabilities específicas peligrosas dentro de contenedores</h2>
+<p>Sin llegar a <code>--privileged</code> completo, ciertas capabilities individuales asignadas de forma suelta también son problemáticas — <code>SYS_ADMIN</code> es la más citada porque habilita un rango amplio de operaciones que en conjunto pueden llevar a escape, dependiendo de qué más esté disponible en el contenedor.</p>
+<pre><code class="language-bash">capsh --print
+</code></pre>
+<p>Revisar qué capabilities tiene el proceso actual dentro del contenedor te dice qué margen real de maniobra existe más allá de lo evidente a simple vista.</p>
+<h2 id="variables-de-entorno-con-credenciales">Variables de entorno con credenciales</h2>
+<p>Esto no es específico de Docker pero aparece constantemente en contenedores mal gestionados — credenciales de base de datos, tokens de API, claves de servicios cloud pasadas como variables de entorno en vez de gestionadas con un secreto adecuado:</p>
+<pre><code class="language-bash">env | grep -i -E &quot;password|key|token|secret&quot;
+</code></pre>
+<p>Frecuentemente esas mismas credenciales dan acceso a recursos fuera del propio contenedor (una base de datos compartida, un bucket cloud), ampliando el impacto más allá del contenedor comprometido.</p>
+<h2 id="lo-que-reviso-siempre-en-orden">Lo que reviso siempre, en orden</h2>
+<p>Confirmar que estoy en un contenedor, comprobar si el socket de Docker está accesible, revisar si el contenedor corre en modo privilegiado o con capabilities sueltas peligrosas, y por último buscar credenciales en variables de entorno. El patrón general es el mismo que en escalada de privilegios tradicional — no busco un exploit complejo primero, busco configuraciones que ya rompen el aislamiento por diseño antes de plantear nada más sofisticado.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">docker</a>
+<a href="#" class="tag">contenedores</a>
+<a href="#" class="tag">escape de contenedor</a>
+<a href="#" class="tag">post-explotación</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-esta-en-un-contenedor-no-significa-esta-aislado">Por qué &quot;está en un contenedor&quot; no significa &quot;está aislado&quot;</a></li>
+<li><a href="#lo-primero-que-reviso-al-tener-acceso-a-un-contenedor">Lo primero que reviso al tener acceso a un contenedor</a></li>
+<li><a href="#el-caso-mas-directo-el-socket-de-docker-montado-dentro">El caso más directo: el socket de Docker montado dentro</a></li>
+<li><a href="#contenedores-en-modo-privileged">Contenedores en modo privileged</a></li>
+<li><a href="#capabilities-especificas-peligrosas-dentro-de-contenedores">Capabilities específicas peligrosas dentro de contenedores</a></li>
+<li><a href="#variables-de-entorno-con-credenciales">Variables de entorno con credenciales</a></li>
+<li><a href="#lo-que-reviso-siempre-en-orden">Lo que reviso siempre, en orden</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html&text=Docker:%20lo%20básico%20de%20seguridad%20que%20reviso%20antes%20de%20dar%20por%20seguro%20un%20contenedor" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/docker-seguridad-escape-basico.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "docker-seguridad-escape-basico";
+    const category = "linux";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

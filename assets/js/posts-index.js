@@ -1,6 +1,26 @@
 // Auto-generado por scripts/build.py — NO EDITAR A MANO
 window.POSTS_INDEX = [
   {
+    "title": "Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor",
+    "slug": "docker-seguridad-escape-basico",
+    "url": "/RedTeamNotes/posts/docker-seguridad-escape-basico.html",
+    "hasCover": false,
+    "coverExt": "png",
+    "category": "Linux",
+    "categorySlug": "linux",
+    "tags": [
+      "docker",
+      "contenedores",
+      "escape de contenedor",
+      "post-explotación"
+    ],
+    "date": "2027-02-17",
+    "dateHuman": "17 Febrero 2027",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
