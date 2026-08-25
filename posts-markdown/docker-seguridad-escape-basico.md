@@ -4,7 +4,7 @@ description: "Configuraciones de Docker que abren la puerta a un escape de conte
 slug: "docker-seguridad-escape-basico"
 category: "Linux"
 tags: ["docker", "contenedores", "escape de contenedor", "post-explotación"]
-date: "2027-02-17"
+date: "2027-08-17"
 level: "Avanzado"
 ---
 
