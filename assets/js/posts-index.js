@@ -14,8 +14,8 @@ window.POSTS_INDEX = [
       "escape de contenedor",
       "post-explotación"
     ],
-    "date": "2027-02-17",
-    "dateHuman": "17 Febrero 2027",
+    "date": "2027-08-17",
+    "dateHuman": "17 Agosto 2027",
     "readTime": "3 min",
     "author": "R3yv4j",
     "excerpt": "Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host."
