@@ -4,8 +4,8 @@ window.POSTS_INDEX = [
     "title": "Docker: lo básico de seguridad que reviso antes de dar por seguro un contenedor",
     "slug": "docker-seguridad-escape-basico",
     "url": "/RedTeamNotes/posts/docker-seguridad-escape-basico.html",
-    "hasCover": false,
-    "coverExt": "png",
+    "hasCover": true,
+    "coverExt": "jpeg",
     "category": "Linux",
     "categorySlug": "linux",
     "tags": [
