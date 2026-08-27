@@ -15,6 +15,14 @@
       <category>Linux</category>
     </item>
     <item>
+      <title>Capabilities de Linux: el mecanismo que va más allá de SUID</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/linux-capabilities-a-fondo.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/linux-capabilities-a-fondo.html</guid>
+      <pubDate>Wed, 10 Feb 2027 00:00:00 +0000</pubDate>
+      <description>Cómo funcionan las capabilities de Linux a nivel de kernel, por qué existen como alternativa a SUID, y las que más aparecen como vector de escalada de privilegios.</description>
+      <category>Linux</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>

@@ -21,6 +21,26 @@ window.POSTS_INDEX = [
     "excerpt": "Configuraciones de Docker que abren la puerta a un escape de contenedor, y el caso del socket de Docker montado dentro del propio contenedor que da control total sobre el host."
   },
   {
+    "title": "Capabilities de Linux: el mecanismo que va más allá de SUID",
+    "slug": "linux-capabilities-a-fondo",
+    "url": "/RedTeamNotes/posts/linux-capabilities-a-fondo.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Linux",
+    "categorySlug": "linux",
+    "tags": [
+      "capabilities",
+      "linux",
+      "privilege escalation",
+      "kernel"
+    ],
+    "date": "2027-02-10",
+    "dateHuman": "10 Febrero 2027",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Cómo funcionan las capabilities de Linux a nivel de kernel, por qué existen como alternativa a SUID, y las que más aparecen como vector de escalada de privilegios."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
