@@ -23,6 +23,14 @@
       <category>Linux</category>
     </item>
     <item>
+      <title>OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html</guid>
+      <pubDate>Wed, 03 Feb 2027 00:00:00 +0000</pubDate>
+      <description>Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas.</description>
+      <category>Vulnerabilidades</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>

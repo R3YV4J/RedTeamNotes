@@ -41,6 +41,25 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo funcionan las capabilities de Linux a nivel de kernel, por qué existen como alternativa a SUID, y las que más aparecen como vector de escalada de privilegios."
   },
   {
+    "title": "OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad",
+    "slug": "owasp-top-10-explicado",
+    "url": "/RedTeamNotes/posts/owasp-top-10-explicado.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Vulnerabilidades",
+    "categorySlug": "vulnerabilidades",
+    "tags": [
+      "owasp",
+      "fundamentos",
+      "pentesting web"
+    ],
+    "date": "2027-02-03",
+    "dateHuman": "3 Febrero 2027",
+    "readTime": "4 min",
+    "author": "R3yv4j",
+    "excerpt": "Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",

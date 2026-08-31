@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad · RedTeamNotes</title>
+  <meta name="description" content="Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas.">
+  <meta name="keywords" content="owasp, fundamentos, pentesting web">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html">
+  <meta property="og:title" content="OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad · RedTeamNotes">
+  <meta property="og:description" content="Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-owasp-top-10-explicado.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2027-02-03">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Vulnerabilidades">
+  <meta property="article:tag" content="owasp, fundamentos, pentesting web">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad">
+  <meta name="twitter:description" content="Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-owasp-top-10-explicado.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad",
+    "description": "Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-owasp-top-10-explicado.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2027-02-03",
+    "dateModified": "2027-02-03",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html"},
+    "articleSection": "Vulnerabilidades",
+    "keywords": "owasp, fundamentos, pentesting web",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Vulnerabilidades", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/vulnerabilidades.html"},
+      {"@type": "ListItem", "position": 3, "name": "OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/vulnerabilidades.html">Vulnerabilidades</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">OWASP Top 10: lo que cubre cada categoría, con enlaces a lo </span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-vulnerabilidades">Vulnerabilidades</span>
+      <span class="card-date">3 Febrero 2027</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">OWASP Top 10: lo que cubre cada categoría, con enlaces a lo que ya he probado de verdad</h1>
+    <p class="article-subtitle">Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        3 Febrero 2027
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~4 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Principiante
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-este-no-es-un-simple-resumen-de-wikipedia">Por qué este no es un simple resumen de Wikipedia</a></li>
+<li><a href="#a01-broken-access-control">A01: Broken Access Control</a></li>
+<li><a href="#a02-cryptographic-failures">A02: Cryptographic Failures</a></li>
+<li><a href="#a03-injection">A03: Injection</a></li>
+<li><a href="#a04-insecure-design">A04: Insecure Design</a></li>
+<li><a href="#a05-security-misconfiguration">A05: Security Misconfiguration</a></li>
+<li><a href="#a06-vulnerable-and-outdated-components">A06: Vulnerable and Outdated Components</a></li>
+<li><a href="#a07-identification-and-authentication-failures">A07: Identification and Authentication Failures</a></li>
+<li><a href="#a08-software-and-data-integrity-failures">A08: Software and Data Integrity Failures</a></li>
+<li><a href="#a09-security-logging-and-monitoring-failures">A09: Security Logging and Monitoring Failures</a></li>
+<li><a href="#a10-server-side-request-forgery-ssrf">A10: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="#como-uso-esta-lista-en-la-practica">Cómo uso esta lista en la práctica</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-este-no-es-un-simple-resumen-de-wikipedia">Por qué este no es un simple resumen de Wikipedia</h2>
+<p>El OWASP Top 10 se cita constantemente pero rara vez se explica con ejemplos de qué significa cada categoría en la práctica, más allá del nombre. Este artículo es el mapa general — para varias de estas categorías ya until until until until until until until until until until until until until until escribí artículos dedicados con más profundidad, y los enlazo donde corresponde en vez de repetir el contenido aquí.</p>
+<h2 id="a01-broken-access-control">A01: Broken Access Control</h2>
+<p>Fallos de control de acceso — cuando la aplicación no comprueba correctamente si el usuario tiene permiso para hacer lo que está intentando. IDOR es el ejemplo más directo de esta categoría: acceder a datos de otro usuario simplemente cambiando un identificador, sin que el servidor verifique que te pertenece.</p>
+<p>Ya cubrí esto en detalle en mi artículo sobre IDOR — sigue siendo, en mi experiencia, de las categorías más frecuentes en aplicaciones reales porque no depende de ningún fallo técnico complejo, solo de lógica de permisos mal implementada.</p>
+<h2 id="a02-cryptographic-failures">A02: Cryptographic Failures</h2>
+<p>Datos sensibles expuestos por cifrado ausente, débil, o mal implementado — contraseñas guardadas sin hash, uso de algoritmos obsoletos (MD5 para contraseñas, por ejemplo), o transmisión de datos sensibles sin TLS. Relacionado directamente con lo que cubrí en mi artículo de hashcat: si encuentras hashes MD5 sin salt para contraseñas de usuarios, ya tienes un fallo de esta categoría confirmado, independientemente de si consigues crackear algo.</p>
+<h2 id="a03-injection">A03: Injection</h2>
+<p>SQL injection es el ejemplo más conocido, pero la categoría incluye cualquier inyección donde datos no confiables se interpretan como código o comandos — inyección de comandos del sistema operativo, inyección LDAP, inyección NoSQL.</p>
+<p>Mi artículo de SQL injection manual cubre el caso más común de esta categoría con el proceso completo, desde detección hasta extracción de datos.</p>
+<h2 id="a04-insecure-design">A04: Insecure Design</h2>
+<p>Categoría más reciente en el Top 10, centrada en fallos de diseño de la aplicación, no de implementación — por ejemplo, un flujo de recuperación de contraseña que no limita intentos, permitiendo fuerza bruta del código de verificación aunque cada intento individual esté "bien implementado" técnicamente. No hay un CVE que buscar aquí; es un problema de cómo se planteó la funcionalidad desde el principio.</p>
+<h2 id="a05-security-misconfiguration">A05: Security Misconfiguration</h2>
+<p>Configuraciones por defecto sin cambiar, servicios innecesarios expuestos, mensajes de error que revelan información técnica de más. Esto es justo lo que Nikto busca de forma automatizada — cabeceras de seguridad ausentes, archivos de configuración expuestos, versiones de software desactualizadas visibles en banners.</p>
+<h2 id="a06-vulnerable-and-outdated-components">A06: Vulnerable and Outdated Components</h2>
+<p>Usar librerías o dependencias con vulnerabilidades conocidas y sin parchear. Esto conecta directamente con mi artículo de metodología de análisis de CVE — la parte de "¿me afecta a mí?" es exactamente donde compruebas versiones reales de dependencias contra vulnerabilidades publicadas.</p>
+<h2 id="a07-identification-and-authentication-failures">A07: Identification and Authentication Failures</h2>
+<p>Fallos en cómo la aplicación gestiona identidad y sesiones — contraseñas débiles permitidas sin política, sesiones que no expiran, ausencia de protección contra fuerza bruta en el login. Relacionado con lo que cubro en mi artículo de fuerza bruta HTTP con Python: si una aplicación no bloquea ni limita intentos fallidos de login, esta categoría está presente.</p>
+<h2 id="a08-software-and-data-integrity-failures">A08: Software and Data Integrity Failures</h2>
+<p>Fallos donde la aplicación confía en actualizaciones, plugins o datos sin verificar su integridad — por ejemplo, un CI/CD que descarga dependencias sin verificar checksums, permitiendo que una dependencia comprometida se integre sin detección.</p>
+<h2 id="a09-security-logging-and-monitoring-failures">A09: Security Logging and Monitoring Failures</h2>
+<p>Ausencia de logs suficientes o de monitorización que permita detectar un ataque en curso o después del hecho. No es una vulnerabilidad "explotable" directamente, pero es lo que determina si una organización se entera de que algo pasó — o si el atacante tiene semanas de margen antes de que alguien note algo raro.</p>
+<h2 id="a10-server-side-request-forgery-ssrf">A10: Server-Side Request Forgery (SSRF)</h2>
+<p>La categoría más reciente en incorporarse al Top 10, y la que until cubrí en detalle en mi propio artículo de SSRF — con el matiz de que el impacto real depende muchísimo del entorno donde esté alojada la aplicación, sobre todo en infraestructura cloud.</p>
+<h2 id="como-uso-esta-lista-en-la-practica">Cómo uso esta lista en la práctica</h2>
+<p>No como checklist mecánico a marcar una a una, sino como recordatorio de las categorías de fallo más frecuentes para no centrarme solo en lo que ya sé buscar bien. Es fácil, con el tiempo, especializarte en encontrar SQLi e IDOR porque son los que mejor conoces, y pasar por alto configuraciones de seguridad ausentes o fallos de diseño que no tienen un payload concreto que probar — el Top 10 sirve para recordar que ahí también hay que mirar.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">owasp</a>
+<a href="#" class="tag">fundamentos</a>
+<a href="#" class="tag">pentesting web</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-este-no-es-un-simple-resumen-de-wikipedia">Por qué este no es un simple resumen de Wikipedia</a></li>
+<li><a href="#a01-broken-access-control">A01: Broken Access Control</a></li>
+<li><a href="#a02-cryptographic-failures">A02: Cryptographic Failures</a></li>
+<li><a href="#a03-injection">A03: Injection</a></li>
+<li><a href="#a04-insecure-design">A04: Insecure Design</a></li>
+<li><a href="#a05-security-misconfiguration">A05: Security Misconfiguration</a></li>
+<li><a href="#a06-vulnerable-and-outdated-components">A06: Vulnerable and Outdated Components</a></li>
+<li><a href="#a07-identification-and-authentication-failures">A07: Identification and Authentication Failures</a></li>
+<li><a href="#a08-software-and-data-integrity-failures">A08: Software and Data Integrity Failures</a></li>
+<li><a href="#a09-security-logging-and-monitoring-failures">A09: Security Logging and Monitoring Failures</a></li>
+<li><a href="#a10-server-side-request-forgery-ssrf">A10: Server-Side Request Forgery (SSRF)</a></li>
+<li><a href="#como-uso-esta-lista-en-la-practica">Cómo uso esta lista en la práctica</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html&text=OWASP%20Top%2010:%20lo%20que%20cubre%20cada%20categoría,%20con%20enlaces%20a%20lo%20que%20ya%20he%20probado%20de%20verdad" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/owasp-top-10-explicado.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "owasp-top-10-explicado";
+    const category = "vulnerabilidades";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>
