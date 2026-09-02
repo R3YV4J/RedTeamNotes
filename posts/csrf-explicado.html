@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>CSRF: por qué sigue apareciendo aunque lleve años siendo conocido · RedTeamNotes</title>
+  <meta name="description" content="Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable.">
+  <meta name="keywords" content="csrf, pentesting web, fundamentos">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html">
+  <meta property="og:title" content="CSRF: por qué sigue apareciendo aunque lleve años siendo conocido · RedTeamNotes">
+  <meta property="og:description" content="Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-csrf-explicado.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2027-01-27">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Vulnerabilidades">
+  <meta property="article:tag" content="csrf, pentesting web, fundamentos">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSRF: por qué sigue apareciendo aunque lleve años siendo conocido">
+  <meta name="twitter:description" content="Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-csrf-explicado.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "CSRF: por qué sigue apareciendo aunque lleve años siendo conocido",
+    "description": "Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-csrf-explicado.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2027-01-27",
+    "dateModified": "2027-01-27",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html"},
+    "articleSection": "Vulnerabilidades",
+    "keywords": "csrf, pentesting web, fundamentos",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Vulnerabilidades", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/vulnerabilidades.html"},
+      {"@type": "ListItem", "position": 3, "name": "CSRF: por qué sigue apareciendo aunque lleve años siendo conocido", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/vulnerabilidades.html">Vulnerabilidades</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">CSRF: por qué sigue apareciendo aunque lleve años siendo con</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-vulnerabilidades">Vulnerabilidades</span>
+      <span class="card-date">27 Enero 2027</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">CSRF: por qué sigue apareciendo aunque lleve años siendo conocido</h1>
+    <p class="article-subtitle">Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        27 Enero 2027
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~4 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Intermedio
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-pensaba-que-csrf-ya-no-era-relevante">Por qué pensaba que CSRF ya no era relevante</a></li>
+<li><a href="#el-mecanismo-basico">El mecanismo básico</a></li>
+<li><a href="#por-que-get-es-peor-que-post-para-esto-y-por-que-post-tampoco-te-salva-del-todo">Por qué GET es peor que POST para esto (y por qué POST tampoco te salva del todo)</a></li>
+<li><a href="#como-confirmo-si-una-accion-es-vulnerable">Cómo confirmo si una acción es vulnerable</a></li>
+<li><a href="#samesite-cookies-que-protege-y-que-no">SameSite cookies: qué protege y qué no</a></li>
+<li><a href="#cuando-sigo-probandolo-aunque-vea-samesite-activo">Cuándo sigo probándolo aunque vea SameSite activo</a></li>
+<li><a href="#por-que-esto-sigue-en-cualquier-checklist-de-pentest-web">Por qué esto sigue en cualquier checklist de pentest web</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-pensaba-que-csrf-ya-no-era-relevante">Por qué pensaba que CSRF ya no era relevante</h2>
+<p>Con SameSite cookies siendo el comportamiento por defecto en navegadores modernos, until asumía que CSRF estaba prácticamente resuelto a nivel de plataforma. La realidad es más matizada: SameSite mitiga el caso más común, pero no todos — aplicaciones con configuraciones específicas, subdominios compartidos, o formularios que no dependen de cookies de sesión de la forma habitual, siguen siendo vulnerables.</p>
+<h2 id="el-mecanismo-basico">El mecanismo básico</h2>
+<p>CSRF aprovecha que el navegador envía automáticamente las cookies de sesión en cualquier petición hacia ese dominio, sin importar desde qué página se originó la petición. Si una aplicación no verifica que la petición vino realmente de su propio formulario (con un token anti-CSRF, por ejemplo), un atacante puede construir una página externa que fuerza al navegador de la víctima a hacer esa petición en su nombre.</p>
+<pre><code class="language-html">&lt;!-- Página maliciosa alojada en cualquier otro sitio --&gt;
+&lt;form action=&quot;http://banco-objetivo.com/transferir&quot; method=&quot;POST&quot;&gt;
+  &lt;input type=&quot;hidden&quot; name=&quot;cuenta_destino&quot; value=&quot;cuenta_atacante&quot;&gt;
+  &lt;input type=&quot;hidden&quot; name=&quot;cantidad&quot; value=&quot;1000&quot;&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit();&lt;/script&gt;
+</code></pre>
+<p>Si la víctima tiene sesión activa en <code>banco-objetivo.com</code> y visita esta página externa, el navegador envía la petición con las cookies de sesión válidas incluidas automáticamente — la aplicación no tiene forma de distinguir esto de una petición legítima, a menos que implemente protección específica.</p>
+<blockquote>
+<p>Solo contra aplicaciones propias o con autorización explícita.</p>
+</blockquote>
+<h2 id="por-que-get-es-peor-que-post-para-esto-y-por-que-post-tampoco-te-salva-del-todo">Por qué GET es peor que POST para esto (y por qué POST tampoco te salva del todo)</h2>
+<p>Si una acción sensible se ejecuta con GET, el ataque es todavía más trivial — ni siquiera necesita un formulario, un simple <code>&lt;img src="http://objetivo.com/borrar?id=5"&gt;</code> dispara la petición. Por eso una buena práctica básica es que acciones que modifican estado nunca vayan por GET. Pero cambiar a POST, por sí solo, no elimina el CSRF — solo elimina el vector más trivial; el formulario auto-enviado con JavaScript sigue funcionando igual contra POST si no hay ninguna otra protección.</p>
+<h2 id="como-confirmo-si-una-accion-es-vulnerable">Cómo confirmo si una acción es vulnerable</h2>
+<p>Con Burp, intercepto la petición legítima de una acción sensible (cambio de email, transferencia, cambio de contraseña) y reviso si incluye algún token que cambia en cada sesión o petición:</p>
+<pre><code class="language-text">POST /cambiar-email
+Cookie: session=abc123
+csrf_token=x7f9a2b1...
+new_email=nuevo@correo.com
+</code></pre>
+<p>Si ese <code>csrf_token</code> está presente y la aplicación lo valida server-side (no solo lo acepta sin comprobar), la acción está protegida. Confirmo la validación real quitando o alterando el token y reenviando — si la petición sigue funcionando igual sin el token correcto, la protección es cosmética, no real.</p>
+<h2 id="samesite-cookies-que-protege-y-que-no">SameSite cookies: qué protege y qué no</h2>
+<pre><code class="language-text">Set-Cookie: session=abc123; SameSite=Strict
+Set-Cookie: session=abc123; SameSite=Lax
+Set-Cookie: session=abc123; SameSite=None
+</code></pre>
+<p><code>Strict</code> bloquea el envío de la cookie en cualquier petición cross-site, incluida la navegación normal desde un enlace externo. <code>Lax</code> (el valor por defecto en navegadores modernos si no se especifica) permite el envío en navegación de nivel superior (como seguir un enlace) pero no en peticiones automáticas de formularios o <code>fetch</code> desde otro origen — lo que mitiga el caso clásico de CSRF, pero no elimina escenarios donde la propia navegación normal del usuario dispara la petición.</p>
+<p><code>None</code> desactiva la protección por completo, y requiere <code>Secure</code> obligatoriamente — a veces necesario en integraciones legítimas entre dominios distintos, pero reintroduce el riesgo de CSRF si la aplicación no compensa con otra protección.</p>
+<h2 id="cuando-sigo-probandolo-aunque-vea-samesite-activo">Cuándo sigo probándolo aunque vea SameSite activo</h2>
+<p>No doy por hecho que SameSite=Lax cierra el caso completamente. Reviso si hay subdominios que comparten el mismo dominio raíz (donde SameSite no protege entre ellos de la misma forma), y si existe algún endpoint que acepte la sesión por otro medio distinto a la cookie (un token en la URL, por ejemplo), lo cual reintroduce el vector aunque las cookies estén bien configuradas.</p>
+<h2 id="por-que-esto-sigue-en-cualquier-checklist-de-pentest-web">Por qué esto sigue en cualquier checklist de pentest web</h2>
+<p>Porque la protección real depende de una implementación correcta de tokens anti-CSRF a nivel de aplicación, y SameSite es una red de seguridad del navegador, no un sustituto de esa implementación. Cuando una aplicación confía solo en SameSite sin tokens propios, sigue habiendo huecos — la comprobación manual con Burp de si el token existe y se valida de verdad sigue siendo necesaria, no solo mirar la cabecera de la cookie.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">csrf</a>
+<a href="#" class="tag">pentesting web</a>
+<a href="#" class="tag">fundamentos</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-pensaba-que-csrf-ya-no-era-relevante">Por qué pensaba que CSRF ya no era relevante</a></li>
+<li><a href="#el-mecanismo-basico">El mecanismo básico</a></li>
+<li><a href="#por-que-get-es-peor-que-post-para-esto-y-por-que-post-tampoco-te-salva-del-todo">Por qué GET es peor que POST para esto (y por qué POST tampoco te salva del todo)</a></li>
+<li><a href="#como-confirmo-si-una-accion-es-vulnerable">Cómo confirmo si una acción es vulnerable</a></li>
+<li><a href="#samesite-cookies-que-protege-y-que-no">SameSite cookies: qué protege y qué no</a></li>
+<li><a href="#cuando-sigo-probandolo-aunque-vea-samesite-activo">Cuándo sigo probándolo aunque vea SameSite activo</a></li>
+<li><a href="#por-que-esto-sigue-en-cualquier-checklist-de-pentest-web">Por qué esto sigue en cualquier checklist de pentest web</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html&text=CSRF:%20por%20qué%20sigue%20apareciendo%20aunque%20lleve%20años%20siendo%20conocido" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "csrf-explicado";
+    const category = "vulnerabilidades";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

@@ -60,6 +60,25 @@ window.POSTS_INDEX = [
     "excerpt": "Resumen práctico del OWASP Top 10 con ejemplos reales de cada categoría, y referencias a mis propios artículos donde ya until until until until profundicé en varias de ellas."
   },
   {
+    "title": "CSRF: por qué sigue apareciendo aunque lleve años siendo conocido",
+    "slug": "csrf-explicado",
+    "url": "/RedTeamNotes/posts/csrf-explicado.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Vulnerabilidades",
+    "categorySlug": "vulnerabilidades",
+    "tags": [
+      "csrf",
+      "pentesting web",
+      "fundamentos"
+    ],
+    "date": "2027-01-27",
+    "dateHuman": "27 Enero 2027",
+    "readTime": "4 min",
+    "author": "R3yv4j",
+    "excerpt": "Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",

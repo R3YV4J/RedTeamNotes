@@ -31,6 +31,14 @@
       <category>Vulnerabilidades</category>
     </item>
     <item>
+      <title>CSRF: por qué sigue apareciendo aunque lleve años siendo conocido</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/csrf-explicado.html</guid>
+      <pubDate>Wed, 27 Jan 2027 00:00:00 +0000</pubDate>
+      <description>Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable.</description>
+      <category>Vulnerabilidades</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Fri, 23 Jan 2026 00:00:00 +0000</pubDate>
       <description>Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.</description>
       <category>Pentesting</category>
-    </item>
-    <item>
-      <title>Wireshark: cómo encuentro un escaneo o un ARP spoof en una captura</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/wireshark-analisis-trafico.html</guid>
-      <pubDate>Thu, 08 Jan 2026 00:00:00 +0000</pubDate>
-      <description>Los filtros que uso de verdad en Wireshark para detectar escaneos de puertos y ARP spoofing, y por qué capturar &#x27;todo&#x27; en una red grande es mala idea.</description>
-      <category>Redes</category>
     </item>
   </channel>
 </rss>
