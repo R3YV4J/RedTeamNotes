@@ -79,6 +79,25 @@ window.POSTS_INDEX = [
     "excerpt": "Cross-Site Request Forgery explicado con un caso práctico, por qué las cookies SameSite no lo eliminan del todo, y cómo confirmo si una acción es realmente vulnerable."
   },
   {
+    "title": "SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado",
+    "slug": "ssrf-server-side-request-forgery",
+    "url": "/RedTeamNotes/posts/ssrf-server-side-request-forgery.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Vulnerabilidades",
+    "categorySlug": "vulnerabilidades",
+    "tags": [
+      "ssrf",
+      "pentesting web",
+      "cloud security"
+    ],
+    "date": "2027-01-20",
+    "dateHuman": "20 Enero 2027",
+    "readTime": "4 min",
+    "author": "R3yv4j",
+    "excerpt": "Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",

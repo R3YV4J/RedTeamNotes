@@ -39,6 +39,14 @@
       <category>Vulnerabilidades</category>
     </item>
     <item>
+      <title>SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html</guid>
+      <pubDate>Wed, 20 Jan 2027 00:00:00 +0000</pubDate>
+      <description>Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno.</description>
+      <category>Vulnerabilidades</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Thu, 05 Feb 2026 00:00:00 +0000</pubDate>
       <description>Cómo uso theHarvester para enumeración rápida de emails y subdominios antes de pasar a herramientas más pesadas como Maltego.</description>
       <category>OSINT</category>
-    </item>
-    <item>
-      <title>Nmap en condiciones: lo que uso de verdad en un pentest</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/guia-nmap-completa.html</guid>
-      <pubDate>Fri, 23 Jan 2026 00:00:00 +0000</pubDate>
-      <description>Los flags de Nmap que realmente uso, en qué orden, y los errores que me han hecho perder tiempo: timeouts, -p- olvidado, falsos negativos por filtrado.</description>
-      <category>Pentesting</category>
     </item>
   </channel>
 </rss>

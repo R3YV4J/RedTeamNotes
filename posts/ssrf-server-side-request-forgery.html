@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado · RedTeamNotes</title>
+  <meta name="description" content="Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno.">
+  <meta name="keywords" content="ssrf, pentesting web, cloud security">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html">
+  <meta property="og:title" content="SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado · RedTeamNotes">
+  <meta property="og:description" content="Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-ssrf-server-side-request-forgery.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2027-01-20">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Vulnerabilidades">
+  <meta property="article:tag" content="ssrf, pentesting web, cloud security">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado">
+  <meta name="twitter:description" content="Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-ssrf-server-side-request-forgery.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado",
+    "description": "Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-ssrf-server-side-request-forgery.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2027-01-20",
+    "dateModified": "2027-01-20",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html"},
+    "articleSection": "Vulnerabilidades",
+    "keywords": "ssrf, pentesting web, cloud security",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Vulnerabilidades", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/vulnerabilidades.html"},
+      {"@type": "ListItem", "position": 3, "name": "SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/vulnerabilidades.html">Vulnerabilidades</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">SSRF: cómo lo busco y por qué el impacto depende de dónde es</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-vulnerabilidades">Vulnerabilidades</span>
+      <span class="card-date">20 Enero 2027</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">SSRF: cómo lo busco y por qué el impacto depende de dónde estés alojado</h1>
+    <p class="article-subtitle">Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        20 Enero 2027
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~4 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Intermedio
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-el-mismo-bug-puede-ser-molesto-o-critico">Por qué el mismo bug puede ser &quot;molesto&quot; o &quot;crítico&quot;</a></li>
+<li><a href="#que-es-en-la-practica">Qué es, en la práctica</a></li>
+<li><a href="#el-caso-clasico-metadatos-de-instancia-cloud">El caso clásico: metadatos de instancia cloud</a></li>
+<li><a href="#otros-objetivos-internos-no-solo-cloud">Otros objetivos internos, no solo cloud</a></li>
+<li><a href="#bypasses-comunes-cuando-hay-un-filtro-de-dominio">Bypasses comunes cuando hay un filtro de dominio</a></li>
+<li><a href="#confirmar-ssrf-ciego-con-un-servicio-propio">Confirmar SSRF ciego con un servicio propio</a></li>
+<li><a href="#por-que-esto-no-aparece-siempre-en-escaneres-automaticos">Por qué esto no aparece siempre en escáneres automáticos</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-el-mismo-bug-puede-ser-molesto-o-critico">Por qué el mismo bug puede ser "molesto" o "crítico"</h2>
+<p>La primera vez que until encontré un SSRF lo reporté como severidad media — al fin y al cabo, "solo" permitía que el servidor hiciera una petición a una URL que yo controlaba. Lo que no until until until until until until until until entendí hasta después es que en un entorno cloud (AWS, GCP, Azure), ese mismo bug puede escalar a robo de credenciales completas de la instancia, simplemente porque hay un endpoint de metadatos interno accesible solo desde el propio servidor — que es justo lo que el SSRF te permite alcanzar.</p>
+<h2 id="que-es-en-la-practica">Qué es, en la práctica</h2>
+<p>Un SSRF ocurre cuando una aplicación acepta una URL (o algo que se convierte en una) como parámetro y hace una petición HTTP a esa URL desde el propio servidor, sin validar suficientemente a dónde apunta:</p>
+<pre><code class="language-text">POST /api/generar-miniatura
+{&quot;url&quot;: &quot;http://ejemplo.com/imagen.jpg&quot;}
+</code></pre>
+<p>Si la aplicación descarga esa imagen para procesarla, y no valida que la URL apunte a un dominio permitido, puedes sustituirla por algo que el servidor sí puede alcanzar pero que tú no puedes desde fuera.</p>
+<blockquote>
+<p>Solo contra aplicaciones propias o con autorización explícita.</p>
+</blockquote>
+<h2 id="el-caso-clasico-metadatos-de-instancia-cloud">El caso clásico: metadatos de instancia cloud</h2>
+<p>En AWS (y de forma similar en otros proveedores), cada instancia tiene un endpoint interno de metadatos accesible solo desde dentro de la propia red de la instancia:</p>
+<pre><code class="language-text">http://169.254.169.254/latest/meta-data/
+</code></pre>
+<p>Si el SSRF te permite hacer que el servidor pida esa URL en tu lugar, y te devuelve la respuesta (o parte de ella), puedes acabar leyendo credenciales temporales de IAM asociadas a esa instancia:</p>
+<pre><code class="language-text">{&quot;url&quot;: &quot;http://169.254.169.254/latest/meta-data/iam/security-credentials/&quot;}
+</code></pre>
+<p>Con esas credenciales, dependiendo de qué permisos tenga el rol asociado a la instancia, el impacto puede escalar de "leer una respuesta interna" a "control sobre recursos de la cuenta cloud completa" — de ahí que la severidad real dependa tanto del entorno de alojamiento, no solo del bug en sí.</p>
+<h2 id="otros-objetivos-internos-no-solo-cloud">Otros objetivos internos, no solo cloud</h2>
+<pre><code class="language-text">{&quot;url&quot;: &quot;http://localhost:6379/&quot;}    → posible Redis interno sin autenticación
+{&quot;url&quot;: &quot;http://192.168.1.5:8080/&quot;}  → servicio interno no accesible desde fuera
+{&quot;url&quot;: &quot;file:///etc/passwd&quot;}        → si el esquema file:// no está bloqueado
+</code></pre>
+<p>El SSRF no solo sirve para llegar a metadatos cloud — es una forma de usar el servidor como proxy hacia cualquier red interna a la que él sí tiene acceso pero tú no.</p>
+<h2 id="bypasses-comunes-cuando-hay-un-filtro-de-dominio">Bypasses comunes cuando hay un filtro de dominio</h2>
+<p>Muchas aplicaciones intentan mitigar SSRF con una lista blanca de dominios permitidos, pero la validación a veces es incompleta:</p>
+<pre><code class="language-text">http://dominio-permitido.com@169.254.169.254/
+  → algunos parsers de URL leen esto como &quot;usuario@host&quot;, validando
+    solo la parte antes de la @ pero conectando al host real después
+
+http://169.254.169.254#dominio-permitido.com
+  → el fragmento después de # a veces se ignora en la validación
+    pero no en la conexión real
+
+http://[::ffff:169.254.169.254]/
+  → representación IPv6 de una IP IPv4, que algunos filtros no reconocen
+</code></pre>
+<p>Ninguno de estos funciona siempre — depende completamente de cómo esté implementada la validación del lado servidor, pero son los primeros que pruebo cuando veo un filtro de dominio aparentemente bien hecho.</p>
+<h2 id="confirmar-ssrf-ciego-con-un-servicio-propio">Confirmar SSRF ciego con un servicio propio</h2>
+<p>Cuando la aplicación no refleja la respuesta de vuelta (SSRF ciego), uso un servicio que registra peticiones entrantes (Burp Collaborator, o un servidor propio con <code>netcat</code> escuchando) para confirmar que la petición efectivamente salió del servidor objetivo:</p>
+<pre><code class="language-bash">nc -lvnp 8888
+</code></pre>
+<pre><code class="language-text">{&quot;url&quot;: &quot;http://tu-ip:8888/confirmacion-ssrf&quot;}
+</code></pre>
+<p>Si ves la conexión entrante en tu listener, tienes confirmación de que el servidor hizo la petición, aunque nunca veas la respuesta en la aplicación.</p>
+<h2 id="por-que-esto-no-aparece-siempre-en-escaneres-automaticos">Por qué esto no aparece siempre en escáneres automáticos</h2>
+<p>Un escáner genérico no sabe qué URL interna tiene sentido probar en tu contexto específico — el endpoint de metadatos cloud, un servicio interno concreto de la infraestructura del objetivo, son cosas que dependen de conocer o suponer la arquitectura real detrás. Por eso SSRF es de las vulnerabilidades donde entender el entorno de despliegue (¿está en AWS? ¿en un datacenter propio? ¿qué servicios internos podría tener?) importa tanto como encontrar el parámetro vulnerable en sí.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">ssrf</a>
+<a href="#" class="tag">pentesting web</a>
+<a href="#" class="tag">cloud security</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-el-mismo-bug-puede-ser-molesto-o-critico">Por qué el mismo bug puede ser &quot;molesto&quot; o &quot;crítico&quot;</a></li>
+<li><a href="#que-es-en-la-practica">Qué es, en la práctica</a></li>
+<li><a href="#el-caso-clasico-metadatos-de-instancia-cloud">El caso clásico: metadatos de instancia cloud</a></li>
+<li><a href="#otros-objetivos-internos-no-solo-cloud">Otros objetivos internos, no solo cloud</a></li>
+<li><a href="#bypasses-comunes-cuando-hay-un-filtro-de-dominio">Bypasses comunes cuando hay un filtro de dominio</a></li>
+<li><a href="#confirmar-ssrf-ciego-con-un-servicio-propio">Confirmar SSRF ciego con un servicio propio</a></li>
+<li><a href="#por-que-esto-no-aparece-siempre-en-escaneres-automaticos">Por qué esto no aparece siempre en escáneres automáticos</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html&text=SSRF:%20cómo%20lo%20busco%20y%20por%20qué%20el%20impacto%20depende%20de%20dónde%20estés%20alojado" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/ssrf-server-side-request-forgery.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "ssrf-server-side-request-forgery";
+    const category = "vulnerabilidades";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>
