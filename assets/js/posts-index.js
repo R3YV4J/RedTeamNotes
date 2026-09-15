@@ -98,6 +98,26 @@ window.POSTS_INDEX = [
     "excerpt": "Server-Side Request Forgery explicado con ejemplos prácticos: de la URL controlada al acceso a metadatos de instancia en la nube, y por qué el mismo bug tiene impacto muy distinto según el entorno."
   },
   {
+    "title": "Requests y BeautifulSoup para reconocimiento web automatizado",
+    "slug": "python-requests-beautifulsoup-recon",
+    "url": "/RedTeamNotes/posts/python-requests-beautifulsoup-recon.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Python",
+    "categorySlug": "python",
+    "tags": [
+      "python",
+      "requests",
+      "beautifulsoup",
+      "reconocimiento web"
+    ],
+    "date": "2027-01-13",
+    "dateHuman": "13 Enero 2027",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Cómo combino requests y BeautifulSoup para extraer enlaces, formularios y comentarios ocultos de una página, cuando necesito algo más flexible que un escáner ya hecho."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
