@@ -55,6 +55,14 @@
       <category>Python</category>
     </item>
     <item>
+      <title>Metadatos EXIF: lo que se puede sacar de una imagen sin tocarla</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/metadatos-exif-osint.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/metadatos-exif-osint.html</guid>
+      <pubDate>Wed, 06 Jan 2027 00:00:00 +0000</pubDate>
+      <description>Cómo extraigo metadatos EXIF con exiftool, qué información revela realmente una foto (y qué ya no, por las políticas de las redes sociales) y el caso donde la geolocalización delató más de lo esperado.</description>
+      <category>OSINT</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
       <description>Qué hago nada más instalar Kali Linux antes de empezar a practicar: actualizaciones, herramientas que faltan, y errores típicos al principio.</description>
       <category>Linux</category>
-    </item>
-    <item>
-      <title>Maltego para OSINT: cuándo sirve y cuándo es perder el tiempo</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/osint-maltego-tutorial.html</guid>
-      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
-      <description>Cómo monto un grafo en Maltego para reconocimiento de organizaciones, qué transforms uso de verdad y por qué la versión Community se queda corta rápido.</description>
-      <category>OSINT</category>
     </item>
   </channel>
 </rss>

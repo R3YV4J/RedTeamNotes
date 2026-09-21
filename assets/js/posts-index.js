@@ -118,6 +118,26 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo combino requests y BeautifulSoup para extraer enlaces, formularios y comentarios ocultos de una página, cuando necesito algo más flexible que un escáner ya hecho."
   },
   {
+    "title": "Metadatos EXIF: lo que se puede sacar de una imagen sin tocarla",
+    "slug": "metadatos-exif-osint",
+    "url": "/RedTeamNotes/posts/metadatos-exif-osint.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "OSINT",
+    "categorySlug": "osint",
+    "tags": [
+      "exif",
+      "metadatos",
+      "OSINT",
+      "exiftool"
+    ],
+    "date": "2027-01-06",
+    "dateHuman": "6 Enero 2027",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Cómo extraigo metadatos EXIF con exiftool, qué información revela realmente una foto (y qué ya no, por las políticas de las redes sociales) y el caso donde la geolocalización delató más de lo esperado."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
