@@ -63,6 +63,14 @@
       <category>OSINT</category>
     </item>
     <item>
+      <title>Buscar una persona por su nombre de usuario: Sherlock y sus límites</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html</guid>
+      <pubDate>Wed, 30 Dec 2026 00:00:00 +0000</pubDate>
+      <description>Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite.</description>
+      <category>OSINT</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
       <description>Cómo uso operadores de búsqueda avanzados de Google para encontrar paneles de administración, archivos expuestos y configuraciones olvidadas sin tocar nada.</description>
       <category>OSINT</category>
-    </item>
-    <item>
-      <title>Kali Linux: lo primero que configuro después de instalarlo</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/kali-linux-primeros-pasos.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/kali-linux-primeros-pasos.html</guid>
-      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
-      <description>Qué hago nada más instalar Kali Linux antes de empezar a practicar: actualizaciones, herramientas que faltan, y errores típicos al principio.</description>
-      <category>Linux</category>
     </item>
   </channel>
 </rss>

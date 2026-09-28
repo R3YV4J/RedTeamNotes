@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Buscar una persona por su nombre de usuario: Sherlock y sus límites · RedTeamNotes</title>
+  <meta name="description" content="Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite.">
+  <meta name="keywords" content="sherlock, OSINT, reconocimiento, username enumeration">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html">
+  <meta property="og:title" content="Buscar una persona por su nombre de usuario: Sherlock y sus límites · RedTeamNotes">
+  <meta property="og:description" content="Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite.">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-osint-username-sherlock.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-12-30">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="OSINT">
+  <meta property="article:tag" content="sherlock, OSINT, reconocimiento, username enumeration">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Buscar una persona por su nombre de usuario: Sherlock y sus límites">
+  <meta name="twitter:description" content="Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite.">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-osint-username-sherlock.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Buscar una persona por su nombre de usuario: Sherlock y sus límites",
+    "description": "Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite.",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-osint-username-sherlock.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-12-30",
+    "dateModified": "2026-12-30",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html"},
+    "articleSection": "OSINT",
+    "keywords": "sherlock, OSINT, reconocimiento, username enumeration",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "OSINT", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/osint.html"},
+      {"@type": "ListItem", "position": 3, "name": "Buscar una persona por su nombre de usuario: Sherlock y sus límites", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/osint.html">OSINT</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Buscar una persona por su nombre de usuario: Sherlock y sus </span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-osint">OSINT</span>
+      <span class="card-date">30 Diciembre 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Buscar una persona por su nombre de usuario: Sherlock y sus límites</h1>
+    <p class="article-subtitle">Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite.</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        30 Diciembre 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~3 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Principiante
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-esto-es-mas-util-de-lo-que-parece-al-principio">Por qué esto es más útil de lo que parece al principio</a></li>
+<li><a href="#instalacion-y-uso-basico">Instalación y uso básico</a></li>
+<li><a href="#el-problema-de-los-falsos-positivos">El problema de los falsos positivos</a></li>
+<li><a href="#filtrar-por-categoria-de-plataforma">Filtrar por categoría de plataforma</a></li>
+<li><a href="#exportar-resultados">Exportar resultados</a></li>
+<li><a href="#variaciones-del-username-que-sherlock-no-prueba-solo">Variaciones del username que Sherlock no prueba solo</a></li>
+<li><a href="#lo-que-sherlock-no-te-dice">Lo que Sherlock no te dice</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-esto-es-mas-util-de-lo-que-parece-al-principio">Por qué esto es más útil de lo que parece al principio</h2>
+<p>La gente reutiliza el mismo nombre de usuario en varias plataformas más de lo que cree. Un username poco común encontrado en un contexto (un foro técnico, un commit de GitHub) muchas veces lleva directamente a un perfil de Twitter, Instagram o LinkedIn de la misma persona, simplemente porque nunca cambió el hábito de usar el mismo alias en todas partes.</p>
+<blockquote>
+<p>Esto es para reconocimiento de superficie de ataque en un pentest con alcance autorizado, o para tu propia higiene digital comprobando tu propia exposición. Usarlo para acosar o investigar a alguien sin motivo legítimo tiene implicaciones legales y éticas serias.</p>
+</blockquote>
+<h2 id="instalacion-y-uso-basico">Instalación y uso básico</h2>
+<pre><code class="language-bash">git clone https://github.com/sherlock-project/sherlock.git
+cd sherlock
+pip install -r requirements.txt
+python3 sherlock usuario_objetivo
+</code></pre>
+<p>Lanza comprobaciones en paralelo contra cientos de plataformas, y te devuelve una lista de URLs donde ese username existe.</p>
+<h2 id="el-problema-de-los-falsos-positivos">El problema de los falsos positivos</h2>
+<p>Esto es lo que más me hizo desconfiar de fiarme del resultado sin comprobar: algunas plataformas devuelven una página con código 200 incluso cuando el usuario no existe (por ejemplo, redirigiendo a una página genérica en vez de un 404 real). Sherlock detecta esto para las plataformas más comunes, pero no para todas — de una lista de 50 resultados "positivos", he tenido casos donde 3 o 4 eran falsos, y solo lo confirmas visitando el enlace a mano.</p>
+<pre><code class="language-bash">python3 sherlock usuario_objetivo --print-found
+</code></pre>
+<p><code>--print-found</code> limita la salida a lo que Sherlock considera confirmado, pero sigo abriendo cada resultado relevante manualmente antes de darlo por bueno en cualquier informe.</p>
+<h2 id="filtrar-por-categoria-de-plataforma">Filtrar por categoría de plataforma</h2>
+<pre><code class="language-bash">python3 sherlock usuario_objetivo --site github --site twitter --site instagram
+</code></pre>
+<p>En vez de lanzar contra las cientos de plataformas que Sherlock conoce (muchas irrelevantes según el contexto de la investigación), limito a las que tienen sentido para el caso — si busco actividad técnica de alguien, priorizo GitHub, GitLab, Stack Overflow por encima de plataformas de citas o gaming que no aportan nada al objetivo.</p>
+<h2 id="exportar-resultados">Exportar resultados</h2>
+<pre><code class="language-bash">python3 sherlock usuario_objetivo --output resultado.txt
+</code></pre>
+<p>Para cruzar después con otras fuentes — por ejemplo, si un perfil de GitHub confirmado revela un email en el <code>README</code> o en commits públicos, eso alimenta directamente una búsqueda posterior con theHarvester o Google Dorking sobre ese email concreto.</p>
+<h2 id="variaciones-del-username-que-sherlock-no-prueba-solo">Variaciones del username que Sherlock no prueba solo</h2>
+<p>Sherlock busca el username exacto que le das. Si sospechas que la persona usa variaciones (con punto, con guión bajo, con un número al final), hay que lanzarlo varias veces con cada variante — la herramienta no genera automáticamente esas combinaciones por ti.</p>
+<pre><code class="language-bash">python3 sherlock usuario_objetivo usuario.objetivo usuario_objetivo1 --print-found
+</code></pre>
+<h2 id="lo-que-sherlock-no-te-dice">Lo que Sherlock no te dice</h2>
+<p>Que un username exista en una plataforma no confirma que sea la misma persona que estás investigando — mucha gente usa alias genéricos o comunes que coinciden por casualidad entre usuarios distintos sin ninguna relación. La confirmación real viene de cruzar varias fuentes (foto de perfil coincidente, biografía con datos consistentes, actividad temporal alineada), no de un solo resultado de Sherlock por sí solo.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">sherlock</a>
+<a href="#" class="tag">OSINT</a>
+<a href="#" class="tag">reconocimiento</a>
+<a href="#" class="tag">username enumeration</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-esto-es-mas-util-de-lo-que-parece-al-principio">Por qué esto es más útil de lo que parece al principio</a></li>
+<li><a href="#instalacion-y-uso-basico">Instalación y uso básico</a></li>
+<li><a href="#el-problema-de-los-falsos-positivos">El problema de los falsos positivos</a></li>
+<li><a href="#filtrar-por-categoria-de-plataforma">Filtrar por categoría de plataforma</a></li>
+<li><a href="#exportar-resultados">Exportar resultados</a></li>
+<li><a href="#variaciones-del-username-que-sherlock-no-prueba-solo">Variaciones del username que Sherlock no prueba solo</a></li>
+<li><a href="#lo-que-sherlock-no-te-dice">Lo que Sherlock no te dice</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html&text=Buscar%20una%20persona%20por%20su%20nombre%20de%20usuario:%20Sherlock%20y%20sus%20límites" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/osint-username-sherlock.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "osint-username-sherlock";
+    const category = "osint";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

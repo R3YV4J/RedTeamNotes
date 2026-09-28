@@ -138,6 +138,26 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo extraigo metadatos EXIF con exiftool, qué información revela realmente una foto (y qué ya no, por las políticas de las redes sociales) y el caso donde la geolocalización delató más de lo esperado."
   },
   {
+    "title": "Buscar una persona por su nombre de usuario: Sherlock y sus límites",
+    "slug": "osint-username-sherlock",
+    "url": "/RedTeamNotes/posts/osint-username-sherlock.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "OSINT",
+    "categorySlug": "osint",
+    "tags": [
+      "sherlock",
+      "OSINT",
+      "reconocimiento",
+      "username enumeration"
+    ],
+    "date": "2026-12-30",
+    "dateHuman": "30 Diciembre 2026",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
