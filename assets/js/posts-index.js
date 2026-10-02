@@ -158,6 +158,25 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo uso Sherlock para encontrar perfiles de un mismo username en distintas plataformas, y por qué los falsos positivos son más frecuentes de lo que la herramienta admite."
   },
   {
+    "title": "SearchSploit más allá de la búsqueda básica",
+    "slug": "searchsploit-avanzado",
+    "url": "/RedTeamNotes/posts/searchsploit-avanzado.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Herramientas",
+    "categorySlug": "herramientas",
+    "tags": [
+      "searchsploit",
+      "exploit-db",
+      "pentesting"
+    ],
+    "date": "2026-12-16",
+    "dateHuman": "16 Diciembre 2026",
+    "readTime": "2 min",
+    "author": "R3yv4j",
+    "excerpt": "Cómo filtro resultados, actualizo la base de datos local y copio exploits directamente con SearchSploit, en vez de depender de buscar en Exploit-DB desde el navegador."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",

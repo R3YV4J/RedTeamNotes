@@ -71,6 +71,14 @@
       <category>OSINT</category>
     </item>
     <item>
+      <title>SearchSploit más allá de la búsqueda básica</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/searchsploit-avanzado.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/searchsploit-avanzado.html</guid>
+      <pubDate>Wed, 16 Dec 2026 00:00:00 +0000</pubDate>
+      <description>Cómo filtro resultados, actualizo la base de datos local y copio exploits directamente con SearchSploit, en vez de depender de buscar en Exploit-DB desde el navegador.</description>
+      <category>Herramientas</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
       <description>El flujo que sigo con Burp Suite Community para encontrar IDORs y otros fallos web, y por qué la versión gratuita se queda corta en cierto punto.</description>
       <category>Herramientas</category>
-    </item>
-    <item>
-      <title>Google Dorking: encontrar información pública que nadie quiso exponer</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/google-dorking-osint.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/google-dorking-osint.html</guid>
-      <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
-      <description>Cómo uso operadores de búsqueda avanzados de Google para encontrar paneles de administración, archivos expuestos y configuraciones olvidadas sin tocar nada.</description>
-      <category>OSINT</category>
     </item>
   </channel>
 </rss>
