@@ -177,6 +177,26 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo filtro resultados, actualizo la base de datos local y copio exploits directamente con SearchSploit, en vez de depender de buscar en Exploit-DB desde el navegador."
   },
   {
+    "title": "Scripts NSE personalizados en Nmap: cuándo escribo el mío propio",
+    "slug": "nmap-nse-scripts-personalizados",
+    "url": "/RedTeamNotes/posts/nmap-nse-scripts-personalizados.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Pentesting",
+    "categorySlug": "pentesting",
+    "tags": [
+      "nmap",
+      "nse",
+      "lua",
+      "automatización"
+    ],
+    "date": "2026-11-25",
+    "dateHuman": "25 Noviembre 2026",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Cómo estructuro un script NSE básico cuando los que trae Nmap por defecto no cubren lo que necesito, y el caso donde me ahorró repetir la misma comprobación manual en 20 hosts."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",

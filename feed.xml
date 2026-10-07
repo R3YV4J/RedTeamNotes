@@ -79,6 +79,14 @@
       <category>Herramientas</category>
     </item>
     <item>
+      <title>Scripts NSE personalizados en Nmap: cuándo escribo el mío propio</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/nmap-nse-scripts-personalizados.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/nmap-nse-scripts-personalizados.html</guid>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Cómo estructuro un script NSE básico cuando los que trae Nmap por defecto no cubren lo que necesito, y el caso donde me ahorró repetir la misma comprobación manual en 20 hosts.</description>
+      <category>Pentesting</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate>
       <description>Cómo decido si un CVE me afecta de verdad: leer el advisory antes que el exploit, entender el CVSS y por qué la lista CISA KEV pesa más que la nota.</description>
       <category>Vulnerabilidades</category>
-    </item>
-    <item>
-      <title>Burp Suite: cómo lo uso en una auditoría web real</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/burp-suite-guia-esencial.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/burp-suite-guia-esencial.html</guid>
-      <pubDate>Wed, 04 Mar 2026 00:00:00 +0000</pubDate>
-      <description>El flujo que sigo con Burp Suite Community para encontrar IDORs y otros fallos web, y por qué la versión gratuita se queda corta en cierto punto.</description>
-      <category>Herramientas</category>
     </item>
   </channel>
 </rss>
