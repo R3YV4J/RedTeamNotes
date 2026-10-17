@@ -87,6 +87,14 @@
       <category>Pentesting</category>
     </item>
     <item>
+      <title>Bind shell vs reverse shell: la diferencia que confundí al principio</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/bind-shell-vs-reverse-shell.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/bind-shell-vs-reverse-shell.html</guid>
+      <pubDate>Wed, 14 Oct 2026 00:00:00 +0000</pubDate>
+      <description>Qué diferencia hay realmente entre una bind shell y una reverse shell, cuándo usar cada una, y por qué en la práctica casi siempre acabo usando reverse shell.</description>
+      <category>Pentesting</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Thu, 02 Apr 2026 00:00:00 +0000</pubDate>
       <description>Port scanner multihilo, verificación de subdominios y por qué mi primer intento con threading se quedó colgado sin avisar.</description>
       <category>Python</category>
-    </item>
-    <item>
-      <title>Leer un CVE sin perderse: lo que miro y en qué orden</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/como-analizar-cve-metodologia.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/como-analizar-cve-metodologia.html</guid>
-      <pubDate>Tue, 17 Mar 2026 00:00:00 +0000</pubDate>
-      <description>Cómo decido si un CVE me afecta de verdad: leer el advisory antes que el exploit, entender el CVSS y por qué la lista CISA KEV pesa más que la nota.</description>
-      <category>Vulnerabilidades</category>
     </item>
   </channel>
 </rss>

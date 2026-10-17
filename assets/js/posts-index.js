@@ -197,6 +197,26 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo estructuro un script NSE básico cuando los que trae Nmap por defecto no cubren lo que necesito, y el caso donde me ahorró repetir la misma comprobación manual en 20 hosts."
   },
   {
+    "title": "Bind shell vs reverse shell: la diferencia que confundí al principio",
+    "slug": "bind-shell-vs-reverse-shell",
+    "url": "/RedTeamNotes/posts/bind-shell-vs-reverse-shell.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Pentesting",
+    "categorySlug": "pentesting",
+    "tags": [
+      "reverse shell",
+      "bind shell",
+      "post-explotación",
+      "fundamentos"
+    ],
+    "date": "2026-10-14",
+    "dateHuman": "14 Octubre 2026",
+    "readTime": "3 min",
+    "author": "R3yv4j",
+    "excerpt": "Qué diferencia hay realmente entre una bind shell y una reverse shell, cuándo usar cada una, y por qué en la práctica casi siempre acabo usando reverse shell."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",
