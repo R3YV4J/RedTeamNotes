@@ -197,6 +197,26 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo estructuro un script NSE básico cuando los que trae Nmap por defecto no cubren lo que necesito, y el caso donde me ahorró repetir la misma comprobación manual en 20 hosts."
   },
   {
+    "title": "LinPEAS, LinEnum y linux-exploit-suggester: cuál lanzo primero",
+    "slug": "linpeas-linenum-comparativa",
+    "url": "/RedTeamNotes/posts/linpeas-linenum-comparativa.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Herramientas",
+    "categorySlug": "herramientas",
+    "tags": [
+      "linpeas",
+      "linenum",
+      "linux-exploit-suggester",
+      "post-explotación"
+    ],
+    "date": "2026-10-21",
+    "dateHuman": "21 Octubre 2026",
+    "readTime": "2 min",
+    "author": "R3yv4j",
+    "excerpt": "Diferencias reales entre las tres herramientas de enumeración de privilegios en Linux más usadas, y el orden en el que las combino según lo que ya vi con mi propio script."
+  },
+  {
     "title": "Bind shell vs reverse shell: la diferencia que confundí al principio",
     "slug": "bind-shell-vs-reverse-shell",
     "url": "/RedTeamNotes/posts/bind-shell-vs-reverse-shell.html",
