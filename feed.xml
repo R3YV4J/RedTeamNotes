@@ -87,6 +87,14 @@
       <category>Pentesting</category>
     </item>
     <item>
+      <title>Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/buffer-overflow-basico.html</guid>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas).</description>
+      <category>Vulnerabilidades</category>
+    </item>
+    <item>
       <title>LinPEAS, LinEnum y linux-exploit-suggester: cuál lanzo primero</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/linpeas-linenum-comparativa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/linpeas-linenum-comparativa.html</guid>
@@ -157,14 +165,6 @@
       <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
       <description>El script bash que monto al ganar acceso a una máquina para enumerar lo básico, y por qué dejé de usar uno descargado de internet sin entenderlo.</description>
       <category>Linux</category>
-    </item>
-    <item>
-      <title>Metasploit: cómo usarlo sin perderse en la primera semana</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/metasploit-primeros-pasos.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/metasploit-primeros-pasos.html</guid>
-      <pubDate>Thu, 02 Apr 2026 00:00:00 +0000</pubDate>
-      <description>Lo básico de Metasploit que necesitas entender antes de lanzar cualquier exploit: módulos, opciones, payloads y por qué msfconsole se cierra solo a veces.</description>
-      <category>Herramientas</category>
     </item>
   </channel>
 </rss>

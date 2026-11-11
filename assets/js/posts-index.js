@@ -197,6 +197,26 @@ window.POSTS_INDEX = [
     "excerpt": "Cómo estructuro un script NSE básico cuando los que trae Nmap por defecto no cubren lo que necesito, y el caso donde me ahorró repetir la misma comprobación manual en 20 hosts."
   },
   {
+    "title": "Buffer overflow básico: el proceso paso a paso que sigo en un binario vulnerable",
+    "slug": "buffer-overflow-basico",
+    "url": "/RedTeamNotes/posts/buffer-overflow-basico.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Vulnerabilidades",
+    "categorySlug": "vulnerabilidades",
+    "tags": [
+      "buffer overflow",
+      "explotación de binarios",
+      "fundamentos",
+      "exploit development"
+    ],
+    "date": "2026-11-04",
+    "dateHuman": "4 Noviembre 2026",
+    "readTime": "4 min",
+    "author": "R3yv4j",
+    "excerpt": "Fuzzing, control de EIP, encontrar el offset con un patrón, y disparar shellcode — el flujo completo de un buffer overflow clásico en un entorno de laboratorio (sin protecciones modernas)."
+  },
+  {
     "title": "LinPEAS, LinEnum y linux-exploit-suggester: cuál lanzo primero",
     "slug": "linpeas-linenum-comparativa",
     "url": "/RedTeamNotes/posts/linpeas-linenum-comparativa.html",
