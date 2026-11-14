@@ -257,6 +257,26 @@ window.POSTS_INDEX = [
     "excerpt": "Qué diferencia hay realmente entre una bind shell y una reverse shell, cuándo usar cada una, y por qué en la práctica casi siempre acabo usando reverse shell."
   },
   {
+    "title": "Netcat: los comandos que uso de verdad, sin memorizar la lista entera",
+    "slug": "netcat-cheatsheet",
+    "url": "/RedTeamNotes/posts/netcat-cheatsheet.html",
+    "hasCover": true,
+    "coverExt": "jpeg",
+    "category": "Herramientas",
+    "categorySlug": "herramientas",
+    "tags": [
+      "netcat",
+      "ncat",
+      "reverse shell",
+      "pentesting"
+    ],
+    "date": "2026-09-16",
+    "dateHuman": "16 Septiembre 2026",
+    "readTime": "2 min",
+    "author": "R3yv4j",
+    "excerpt": "Reverse shells, listeners, transferencia de archivos y escaneo básico con netcat/ncat — lo que realmente repito en cada pentest, no la lista completa de flags que nadie usa."
+  },
+  {
     "title": "Gobuster: los tres modos que uso más allá del descubrimiento de directorios",
     "slug": "gobuster-guia-completa",
     "url": "/RedTeamNotes/posts/gobuster-guia-completa.html",

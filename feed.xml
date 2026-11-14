@@ -111,6 +111,14 @@
       <category>Pentesting</category>
     </item>
     <item>
+      <title>Netcat: los comandos que uso de verdad, sin memorizar la lista entera</title>
+      <link>https://r3yv4j.github.io/RedTeamNotes/posts/netcat-cheatsheet.html</link>
+      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/netcat-cheatsheet.html</guid>
+      <pubDate>Wed, 16 Sep 2026 00:00:00 +0000</pubDate>
+      <description>Reverse shells, listeners, transferencia de archivos y escaneo básico con netcat/ncat — lo que realmente repito en cada pentest, no la lista completa de flags que nadie usa.</description>
+      <category>Herramientas</category>
+    </item>
+    <item>
       <title>Gobuster: los tres modos que uso más allá del descubrimiento de directorios</title>
       <link>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</link>
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/gobuster-guia-completa.html</guid>
@@ -156,14 +164,6 @@
       <guid>https://r3yv4j.github.io/RedTeamNotes/posts/linux-privilege-escalation.html</guid>
       <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
       <description>El orden que sigo para escalar privilegios en Linux: SUID, sudo, cron, capabilities, y el caso real donde LinPEAS no encontró nada y tocó ir a mano.</description>
-      <category>Linux</category>
-    </item>
-    <item>
-      <title>Bash para enumeración: el script que reutilizo en cada máquina</title>
-      <link>https://r3yv4j.github.io/RedTeamNotes/posts/bash-scripting-enumeracion.html</link>
-      <guid>https://r3yv4j.github.io/RedTeamNotes/posts/bash-scripting-enumeracion.html</guid>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 +0000</pubDate>
-      <description>El script bash que monto al ganar acceso a una máquina para enumerar lo básico, y por qué dejé de usar uno descargado de internet sin entenderlo.</description>
       <category>Linux</category>
     </item>
   </channel>
